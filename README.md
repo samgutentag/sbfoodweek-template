@@ -1,16 +1,39 @@
-# SB Burger Week 2026 Map
+# SB Food Week 2026 Map
 
-[![Hits](https://hits.sh/sbburgerweekmap.com.svg)](https://hits.sh/sbburgerweekmap.com/)
+A config-driven interactive map for food week events. Burger week, sandwich week, coffee week — change `config.js` and you're done.
 
-An interactive map of all participating restaurants for [Santa Barbara Burger Week 2026](https://www.independent.com/2026/02/18/go-beast-mode-for-santa-barbara-burger-week-2026/) (Feb 19–25). Browse, filter, share, and plan your burger week from your phone or desktop.
+**Built with:** Leaflet, vanilla JS/CSS, GitHub Pages, Cloudflare Workers (optional)
 
-**Live at [sbburgerweekmap.com](https://sbburgerweekmap.com)**
+**Live examples:**
+- [SB Burger Week](https://sbburgerweekmap.com) — the original
+- [SB Coffee Week](https://sbcoffeeweekmap.com)
 
 ---
 
-## Fork It — Complete Setup Guide
+## Quick Start
 
-Have a burger week, taco week, coffee week, or any food event in your city? Fork this repo and make it your own. This guide walks you through every step from zero to a fully deployed site.
+1. Click **"Use this template"** on GitHub to create your event repo
+2. Edit `config.js` — set event name, dates, emoji, domain
+3. Copy `data-template.js` to `data-YYYY.js` and add your restaurants
+4. Run `python3 apply-theme.py`
+5. Enable GitHub Pages → deploy from main branch
+
+## Staying in Sync
+
+Pull future template improvements into your event repo:
+
+```bash
+git remote add template https://github.com/samgutentag/sbfoodweek-template.git
+git fetch template
+git merge template/main
+# config.js will conflict — keep your values
+```
+
+---
+
+## Complete Setup Guide
+
+Running a food event in your city? This guide walks you through every step from zero to a fully deployed site.
 
 We'll use **"SB Burrito Week"** as the running example throughout.
 
@@ -40,13 +63,13 @@ We'll use **"SB Burrito Week"** as the running example throughout.
 
 ```bash
 # Fork on GitHub, then:
-git clone https://github.com/YOUR_USERNAME/sbburgerweek.git
-cd sbburgerweek
+git clone https://github.com/YOUR_USERNAME/YOUR_REPO.git
+cd YOUR_REPO
 python3 -m http.server 8000 --bind 127.0.0.1
 # Open http://localhost:8000
 ```
 
-You'll see the existing Burger Week map with sample data. A local server is required — `file://` won't work because scripts load via relative paths.
+You'll see the template map with example data. A local server is required — `file://` won't work because scripts load via relative paths.
 
 To test with skeleton data (no menu details), add `?year=9999` to the URL.
 
@@ -125,7 +148,7 @@ const THEME = {
   mapZoom: 13,
 
   // GitHub repo URL (used in About modal and footer)
-  githubRepoUrl: "https://github.com/YOUR_USERNAME/sbburgerweek",
+  githubRepoUrl: "https://github.com/YOUR_USERNAME/YOUR_REPO",
 
   // Data launch date — before this date, data.js (skeleton) loads.
   // On or after this date, data-<year>.js (full menu details) loads.
@@ -269,7 +292,7 @@ This reads `config.js` and updates everything that can't read the config at runt
 1. Go to your repo on GitHub → **Settings** → **Pages**
 2. Under "Source", select **Deploy from a branch**
 3. Select **main** branch → **/ (root)** → click **Save**
-4. Wait 1–2 minutes. Your site is live at `https://YOUR_USERNAME.github.io/sbburgerweek/`
+4. Wait 1–2 minutes. Your site is live at `https://YOUR_USERNAME.github.io/YOUR_REPO/`
 
 At this point you have a working map. Everything below is optional.
 
@@ -277,7 +300,7 @@ At this point you have a working map. Everything below is optional.
 
 ### Step 7: Custom Domain (Optional)
 
-If you want a clean URL like `sbburritoweekmap.com` instead of `username.github.io/sbburgerweek`.
+If you want a clean URL like `sbburritoweekmap.com` instead of `username.github.io/YOUR_REPO`.
 
 #### 7a. Buy a Domain
 
@@ -572,11 +595,11 @@ The map can be embedded on other websites via an iframe. A showcase page at `/em
 
 ```html
 <iframe
-  src="https://sbburgerweekmap.com/embed/map"
+  src="https://YOUR-DOMAIN.com/embed/map"
   width="100%"
   height="600"
   style="border: none; border-radius: 8px;"
-  title="SB Burger Week 2026 Interactive Map"
+  title="SB Food Week 2026 Interactive Map"
   loading="lazy"
   allowfullscreen
 ></iframe>
@@ -723,7 +746,7 @@ graph TD
 ## File Structure
 
 ```
-sbburgerweek/
+your-food-week/
 ├── index.html              # Main page shell (OG tags, favicon, analytics)
 ├── app.js                  # Map logic, sidebar, filtering, search, deep linking
 ├── style.css               # All styles including mobile responsive layout
