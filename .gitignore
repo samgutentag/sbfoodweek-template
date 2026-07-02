@@ -1,3 +1,4 @@
 .DS_Store
 .wrangler/
 tracking_data.json
+__pycache__/
