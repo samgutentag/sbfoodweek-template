@@ -182,6 +182,20 @@
         font-size: 13px;
         margin-top: 24px;
       }
+      .section-title {
+        margin: 36px 0 14px;
+        font-size: 18px;
+        font-weight: 700;
+      }
+      .section-title-first {
+        margin-top: 8px;
+      }
+      tr.vp-mobile td {
+        background: #f0faf7;
+      }
+      tr.vp-mobile:hover td {
+        background: #e6f5ef;
+      }
     </style>
   </head>
   <body>
@@ -210,6 +224,188 @@
       </div>
 
       <div class="data-view" id="dataView">
+        <h2 class="section-title section-title-first" id="viewportTitle" style="display: none">
+          Screen Widths
+        </h2>
+        <p class="stat-total" id="viewportTotalRow" style="display: none">
+          Total samples: <strong id="viewportTotal">—</strong>
+        </p>
+        <table id="viewportTable" style="display: none">
+          <thead>
+            <tr>
+              <th>Screen Width</th>
+              <th class="col-count">Visits</th>
+              <th class="col-count">Share</th>
+            </tr>
+          </thead>
+          <tbody id="viewportBody"></tbody>
+        </table>
+        <p class="footer-note" id="viewportNote" style="display: none">
+          One sample per visit · all collected data · mobile widths shaded
+        </p>
+
+        <h2 class="section-title" id="sourceTitle" style="display: none">
+          Traffic Sources
+        </h2>
+        <p class="stat-total" id="sourceTotalRow" style="display: none">
+          Tagged visits: <strong id="sourceTotal">—</strong>
+        </p>
+        <table id="sourceTable" style="display: none">
+          <thead>
+            <tr>
+              <th>Source</th>
+              <th class="col-count">Visits</th>
+              <th class="col-count">Share</th>
+            </tr>
+          </thead>
+          <tbody id="sourceBody"></tbody>
+        </table>
+        <p class="footer-note" id="sourceNote" style="display: none">
+          From the ?src= tag on inbound links (e.g. embed) · untagged visits not counted
+        </p>
+
+        <h2 class="section-title" id="uaTitle" style="display: none">
+          Visitor Areas
+        </h2>
+        <table id="uaTable" style="display: none">
+          <thead>
+            <tr>
+              <th>Neighborhood</th>
+              <th class="col-count">Visitors</th>
+              <th class="col-count">Share</th>
+            </tr>
+          </thead>
+          <tbody id="uaBody"></tbody>
+        </table>
+        <p class="footer-note" id="uaNote" style="display: none">
+          Where visitors are, from "use my location" — coarse neighborhood only
+        </p>
+
+        <h2 class="section-title" id="gvTitle" style="display: none">
+          Geo Demand — Area → Restaurant
+        </h2>
+        <table id="gvTable" style="display: none">
+          <thead>
+            <tr>
+              <th>Visitor area → restaurant</th>
+              <th class="col-count">Views</th>
+              <th class="col-count">Share</th>
+            </tr>
+          </thead>
+          <tbody id="gvBody"></tbody>
+        </table>
+        <p class="footer-note" id="gvNote" style="display: none">
+          Which restaurants located visitors look at, by their neighborhood —
+          the "East Siders want Goleta" signal
+        </p>
+
+        <h2 class="section-title" id="drawerTitle" style="display: none">
+          Drawer Engagement (mobile)
+        </h2>
+        <p class="stat-total" id="drawerTotalRow" style="display: none">
+          Sessions that opened the drawer: <strong id="drawerTotal">—</strong>
+        </p>
+        <table id="drawerTable" style="display: none">
+          <thead>
+            <tr>
+              <th>Reached</th>
+              <th class="col-count">Sessions</th>
+              <th class="col-count">Share</th>
+            </tr>
+          </thead>
+          <tbody id="drawerBody"></tbody>
+        </table>
+        <p class="footer-note" id="drawerNote" style="display: none">
+          First drawer expansion per session · phones only · low numbers mean the
+          list/filters go unseen on mobile
+        </p>
+
+        <h2 class="section-title" id="faTitle" style="display: none">
+          Filters — Neighborhoods
+        </h2>
+        <table id="faTable" style="display: none">
+          <thead>
+            <tr>
+              <th>Neighborhood</th>
+              <th class="col-count">Taps</th>
+              <th class="col-count">Share</th>
+            </tr>
+          </thead>
+          <tbody id="faBody"></tbody>
+        </table>
+        <p class="footer-note" id="faNote" style="display: none">
+          Which areas people filter by — where the demand is
+        </p>
+
+        <h2 class="section-title" id="ftTitle" style="display: none">
+          Filters — Dietary
+        </h2>
+        <table id="ftTable" style="display: none">
+          <thead>
+            <tr>
+              <th>Dietary</th>
+              <th class="col-count">Taps</th>
+              <th class="col-count">Share</th>
+            </tr>
+          </thead>
+          <tbody id="ftBody"></tbody>
+        </table>
+        <p class="footer-note" id="ftNote" style="display: none">
+          Vegetarian / Gluten-Free filter usage
+        </p>
+
+        <h2 class="section-title" id="fhTitle" style="display: none">
+          Filters — Time of Day
+        </h2>
+        <table id="fhTable" style="display: none">
+          <thead>
+            <tr>
+              <th>Time</th>
+              <th class="col-count">Taps</th>
+              <th class="col-count">Share</th>
+            </tr>
+          </thead>
+          <tbody id="fhBody"></tbody>
+        </table>
+        <p class="footer-note" id="fhNote" style="display: none">
+          Open Now / Lunch / Dinner filter usage
+        </p>
+
+        <h2 class="section-title" id="shareTitle" style="display: none">
+          Most Shared
+        </h2>
+        <table id="shareTable" style="display: none">
+          <thead>
+            <tr>
+              <th>Restaurant</th>
+              <th class="col-count">Shares</th>
+              <th class="col-count">Share</th>
+            </tr>
+          </thead>
+          <tbody id="shareBody"></tbody>
+        </table>
+        <p class="footer-note" id="shareNote" style="display: none">
+          Spots people tapped Share on
+        </p>
+
+        <h2 class="section-title" id="dlTitle" style="display: none">
+          Arrived via Shared Link
+        </h2>
+        <table id="dlTable" style="display: none">
+          <thead>
+            <tr>
+              <th>Restaurant</th>
+              <th class="col-count">Arrivals</th>
+              <th class="col-count">Share</th>
+            </tr>
+          </thead>
+          <tbody id="dlBody"></tbody>
+        </table>
+        <p class="footer-note" id="dlNote" style="display: none">
+          Visits that landed on a restaurant via a shared deep-link — word of mouth
+        </p>
+
+        <h2 class="section-title">Search Queries</h2>
         <p class="stat-total">
           Total searches (last 7 days): <strong id="totalCount">—</strong>
         </p>
@@ -224,6 +420,27 @@
           <tbody id="tableBody"></tbody>
         </table>
         <p class="footer-note">Last 7 days · Top 500 queries</p>
+
+        <h2 class="section-title" id="emptyTitle" style="display: none">
+          Empty Searches
+        </h2>
+        <p class="stat-total" id="emptyTotalRow" style="display: none">
+          Searches with no results: <strong id="emptyTotal">—</strong>
+        </p>
+        <table id="emptyTable" style="display: none">
+          <thead>
+            <tr>
+              <th>Query</th>
+              <th class="col-count">Count</th>
+              <th class="col-count">Share</th>
+            </tr>
+          </thead>
+          <tbody id="emptyBody"></tbody>
+        </table>
+        <p class="footer-note" id="emptyNote" style="display: none">
+          Searches that returned zero matches — missing spots, name mismatches,
+          or features people expect
+        </p>
       </div>
     </main>
 

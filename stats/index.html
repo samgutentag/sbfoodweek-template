@@ -30,12 +30,18 @@
     </div>
 
     <main>
+      <div class="date-filter-row" id="dateFilterRow">
+        <span class="date-filter-label">Range</span>
+        <button class="date-filter-btn" data-range="all">All time</button>
+        <button class="date-filter-btn" data-range="pre">Pre-event</button>
+        <button class="date-filter-btn" data-range="event">During</button>
+        <button class="date-filter-btn" data-range="post">Post-event</button>
+      </div>
       <div class="tab-bar">
         <button class="tab-btn active" data-tab="activity">Activity</button>
         <button class="tab-btn" data-tab="insights">Insights</button>
         <button class="tab-btn" data-tab="trends">Trends</button>
         <button class="tab-btn" data-tab="restaurants">Restaurants</button>
-        <button class="tab-btn" data-tab="post-event">Post-Event</button>
       </div>
 
       <div class="tab-panel active" id="tab-activity">
@@ -151,7 +157,6 @@
       <div class="tab-panel" id="tab-insights"></div>
       <div class="tab-panel" id="tab-trends"></div>
       <div class="tab-panel" id="tab-restaurants"></div>
-      <div class="tab-panel" id="tab-post-event"></div>
 
       <p class="footer-note" id="footerNote">Loading data…</p>
     </main>
@@ -164,6 +169,7 @@
           <button class="chart-modal-close" id="chartModalClose">&times;</button>
         </div>
         <div class="chart-modal-body">
+          <p class="chart-modal-caption" id="chartModalCaption"></p>
           <canvas id="chartModalCanvas"></canvas>
         </div>
       </div>
@@ -185,9 +191,15 @@
             src = "../data.js";
           }
         }
-        var err = __dataYearOverride
-          ? ' onerror="window.location.replace(window.location.pathname)"'
-          : "";
+        var err;
+        if (__dataYearOverride) {
+          err = ' onerror="window.location.replace(window.location.pathname)"';
+        } else if (src !== "../data.js") {
+          // this year's data file may not exist yet — fall back to the skeleton
+          err = " onerror=\"document.write('\\x3Cscript src=&quot;../data.js&quot;>\\x3C/script>')\"";
+        } else {
+          err = "";
+        }
         document.write(
           '<script src="' + src + '"' + err + "></" + "script>"
         );

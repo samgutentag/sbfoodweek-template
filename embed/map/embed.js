@@ -3,11 +3,9 @@
 (function () {
   "use strict";
 
-  // ── Redirect mobile users to full map ─────────────
-  if (window.innerWidth <= 600) {
-    window.location.replace(THEME.siteUrl + "/embed/");
-    return;
-  }
+  // On small screens the embed renders a map-only layout (sidebar hidden via
+  // CSS) with a floating "Open full map" CTA, so phone readers still get an
+  // interactive map inline instead of being bounced off the article.
 
   // ── Apply theme to page ──────────────────────────
   document.title = THEME.eventName + " Map";
@@ -23,9 +21,9 @@
       THEME.eventDates +
       "</span>";
   }
-  var embedFullMapLink = document.getElementById("embedFullMapLink");
-  if (embedFullMapLink) {
-    embedFullMapLink.href = THEME.siteUrl + "/";
+  var embedFooterCta = document.getElementById("embedFooterCta");
+  if (embedFooterCta) {
+    embedFooterCta.href = THEME.siteUrl + "/?src=embed";
   }
 
   // ── Apply theme to About modal ─────────────────
@@ -413,10 +411,14 @@
       '"></div>';
     var isUpvoted = upvotedSet.has(r.name);
     var upvoteCount = upvoteCounts[r.name] || 0;
+    var dietaryHtml = getDietaryIconsHtml(r);
     popupHtml +=
       '<div class="popup-section popup-section-name">' +
       "<h3>" +
       escapeHtml(r.name) +
+      (dietaryHtml
+        ? '<span class="dietary-tags">' + dietaryHtml + "</span>"
+        : "") +
       "</h3></div>";
     popupHtml += '<div class="popup-section popup-section-menu">';
     if (r.menuItems.length > 0)
@@ -439,7 +441,7 @@
     else popupHtml += '<p class="popup-coming-soon">Details coming soon!</p>';
     popupHtml += "</div>";
     popupHtml += '<div class="popup-hours" data-hours-name="' + escapeHtml(r.name) + '"></div>';
-    var shareUrl = THEME.siteUrl + "/#" + slugify(r.name);
+    var shareUrl = THEME.siteUrl + "/?src=share#" + slugify(r.name);
     popupHtml +=
       '<div class="popup-section popup-section-directions">' +
       '<div class="popup-section-heading">Address</div>' +
@@ -822,6 +824,68 @@
   });
   filtersEl.parentNode.insertBefore(hoursFilterSpan, filtersEl.nextSibling);
 
+  // ── Dietary tag filters (Vegetarian / Gluten-Free) — 1:1 with the desktop map.
+  // Config icons are bare filenames resolved from the site root; the embed lives
+  // at /embed/map/, so relative paths need a prefix to reach them.
+  function tagIconSrc(icon) {
+    return /^(https?:|\/|\.\.)/.test(icon) ? icon : "../../" + icon;
+  }
+  function getDietaryIconsHtml(r) {
+    var html = "";
+    (THEME.tagFilters || []).forEach(function (t) {
+      if (r[t.key]) {
+        html +=
+          '<img src="' +
+          tagIconSrc(t.icon) +
+          '" alt="' +
+          t.label +
+          '" title="' +
+          t.label +
+          '" class="dietary-icon">';
+      }
+    });
+    return html;
+  }
+
+  var tagDefs = THEME.tagFilters || [];
+  var activeTag = null;
+  var tagFilterSpan = document.createElement("span");
+  tagFilterSpan.id = "tagFilters";
+  tagFilterSpan.className = "hours-filters tag-filters";
+  tagDefs.forEach(function (t) {
+    var btn = document.createElement("button");
+    btn.className = "area-btn";
+    btn.setAttribute("data-tag", t.key);
+    var img = document.createElement("img");
+    img.src = tagIconSrc(t.icon);
+    img.alt = t.label;
+    img.className = "tag-icon";
+    btn.appendChild(img);
+    btn.appendChild(document.createTextNode(" " + t.label));
+    tagFilterSpan.appendChild(btn);
+  });
+  if (tagDefs.length) {
+    filtersEl.parentNode.insertBefore(tagFilterSpan, hoursFilterSpan);
+  }
+
+  tagFilterSpan.addEventListener("click", function (e) {
+    var btn = e.target.closest(".area-btn");
+    if (!btn) return;
+    var tagKey = btn.getAttribute("data-tag");
+    if (activeTag === tagKey) {
+      activeTag = null;
+      btn.classList.remove("active");
+    } else {
+      tagFilterSpan.querySelectorAll(".area-btn").forEach(function (b) {
+        b.classList.remove("active");
+      });
+      activeTag = tagKey;
+      btn.classList.add("active");
+    }
+    if (typeof window.track === "function") window.track("filter-tag", tagKey);
+    renderList();
+  });
+
   filtersEl.addEventListener("click", function (e) {
     if (!e.target.classList.contains("area-btn")) return;
     filtersEl.querySelectorAll(".area-btn").forEach(function (b) {
@@ -857,14 +921,17 @@
   var searchBox = document.getElementById("searchBox");
 
   var searchTrackTimer = null;
+  var lastFilteredCount = 0;
   searchBox.addEventListener("input", function () {
     searchTerm = this.value.toLowerCase().trim();
     renderList();
-    // Track search queries (debounced, 2+ chars)
+    // Track search queries (debounced, 2+ chars). Also flag zero-result
+    // searches — they reveal missing spots, name mismatches, or feature gaps.
     clearTimeout(searchTrackTimer);
     if (searchTerm.length >= 2 && typeof window.track === "function") {
       searchTrackTimer = setTimeout(function () {
         window.track("search", searchTerm);
+        if (lastFilteredCount === 0) window.track("search-empty", searchTerm);
       }, 800);
     }
   });
@@ -903,12 +970,15 @@
           matchesHours = entry.dinner === true;
         }
       }
-      return matchesArea && matchesSearch && matchesHours;
+      var matchesTags = !activeTag || r[activeTag];
+      return matchesArea && matchesSearch && matchesTags && matchesHours;
     });
 
     filtered.sort(function (a, b) {
       return a.name.localeCompare(b.name);
     });
+
+    lastFilteredCount = filtered.length;
 
     if (checklistMode) {
       var checkedCount = filtered.filter(function (r) {
@@ -1305,7 +1375,7 @@
     if (tipShareBtn) {
       tipShareBtn.addEventListener("click", function (e) {
         e.preventDefault();
-        var shareUrl = THEME.siteUrl + "/";
+        var shareUrl = THEME.siteUrl + "/?src=share";
         var shareTitle = THEME.eventName + " Map";
         if (typeof window.track === "function")
           window.track("tip-share", "tip-jar");

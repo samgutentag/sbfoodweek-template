@@ -413,9 +413,11 @@
       .catch(function () { /* section stays hidden */ });
   }
 
-  // Live activity polling — disabled while panel is hidden
-  // updateLiveActivity();
-  // setInterval(updateLiveActivity, 30000);
+  // Live activity polling — only while the event is live (pre-event / during)
+  if (__statsEventState === "pre-event" || __statsEventState === "during") {
+    updateLiveActivity();
+    setInterval(updateLiveActivity, 30000);
+  }
 
   // ── Hourly chart modal ──────────────────
   var hourlyCache = null;
@@ -426,8 +428,9 @@
   var __eventConcluded = __statsEventState === "post-event" || __statsEventState === "off-season";
 
   function hourlyDateParams() {
-    if (THEME.eventStartDate && THEME.eventEndDate) {
-      return "&start=" + encodeURIComponent(THEME.eventStartDate) + "&end=" + encodeURIComponent(THEME.eventEndDate);
+    var r = StatsUtils.getActiveRange();
+    if (r.start && r.end) {
+      return "&start=" + encodeURIComponent(r.start) + "&end=" + encodeURIComponent(r.end);
     }
     return "";
   }
@@ -470,20 +473,24 @@
       .catch(function () { return null; });
   }
 
+  // Worker hour keys ("YYYY-MM-DD HH:MM:SS") are UTC; charts label them on the event's clock
+  function parseHourKey(h) {
+    return new Date(String(h).replace(" ", "T") + "Z");
+  }
+
   function formatHourLabel(h) {
-    var d = new Date(h);
-    var mon = d.getMonth() + 1;
-    var day = d.getDate();
-    var hr = d.getHours();
-    var ampm = hr >= 12 ? "p" : "a";
-    var h12 = hr % 12 || 12;
-    return mon + "/" + day + " " + h12 + ampm;
+    var out = {};
+    new Intl.DateTimeFormat("en-US", {
+      timeZone: THEME.timeZone,
+      month: "numeric", day: "numeric", hour: "numeric", hour12: true,
+    }).formatToParts(parseHourKey(h)).forEach(function (p) { out[p.type] = p.value; });
+    return out.month + "/" + out.day + " " + out.hour + (out.dayPeriod === "AM" ? "a" : "p");
   }
 
   function formatHourTooltip(h) {
-    var d = new Date(h);
-    return d.toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric" }) + " " +
-      d.toLocaleTimeString("en-US", { hour: "numeric", hour12: true });
+    var d = parseHourKey(h);
+    return d.toLocaleDateString("en-US", { timeZone: THEME.timeZone, weekday: "short", month: "short", day: "numeric" }) + " " +
+      d.toLocaleTimeString("en-US", { timeZone: THEME.timeZone, hour: "numeric", hour12: true });
   }
 
   // opts: { cumulative: bool }
@@ -547,8 +554,28 @@
   // Metrics that render as heatmap instead of line chart
   var heatmapMetrics = { "view": true };
 
+  // Plain-language "what this counts" captions, keyed by the card's data-metric.
+  var METRIC_CAPTIONS = {
+    view: "Map views — how often a restaurant's pin was opened.",
+    "directions-apple": "Someone tapped the Apple Maps button for directions.",
+    "directions-google": "Someone tapped the Google Maps button for directions.",
+    website: "Someone tapped through to the restaurant's website.",
+    phone: "Someone tapped the phone number to call.",
+    instagram: "Someone tapped through to the restaurant's Instagram.",
+    share: "Someone used the share button to copy or send a link to this restaurant.",
+    deeplink:
+      "A visit that arrived through a shared link pointing straight at one restaurant — the map auto-opens its pin. The inbound counterpart to Shares.",
+    upvote: "Net upvotes: taps on the heart, minus any that were undone.",
+  };
+
+  function setChartCaption(text) {
+    var el = document.getElementById("chartModalCaption");
+    if (el) el.textContent = text || "";
+  }
+
   // Open chart for a metric (action-based, from ?hourly=true)
   function openChartModal(metricKey, label, opts) {
+    setChartCaption(METRIC_CAPTIONS[metricKey] || "");
     fetchHourly().then(function (data) {
       if (!data) return;
 
@@ -580,6 +607,9 @@
 
   // Open chart for a filter label (label-based, from ?hourly=true&label=X)
   function openFilterChartModal(filterKey, label) {
+    setChartCaption(
+      "How often the " + label + " filter was tapped, shown cumulatively by hour.",
+    );
     fetchHourlyLabel(filterKey).then(function (data) {
       if (!data) return;
       data = StatsUtils.filterHourlyToEvent(data);
@@ -629,12 +659,16 @@
 
     hourlyData = StatsUtils.filterHourlyToEvent(hourlyData);
     var dayMap = {};
+    // Bucket by event-timezone day/hour so the heatmap reads the same for every viewer
+    var bucketFmt = new Intl.DateTimeFormat("en-US", {
+      timeZone: THEME.timeZone,
+      year: "numeric", month: "2-digit", day: "2-digit", hour: "numeric", hour12: false,
+    });
     Object.keys(hourlyData).forEach(function (hour) {
-      var d = new Date(hour.replace(" ", "T") + "Z");
-      var localDate = d.getFullYear() + "-" +
-        String(d.getMonth() + 1).padStart(2, "0") + "-" +
-        String(d.getDate()).padStart(2, "0");
-      var localHour = d.getHours();
+      var parts = {};
+      bucketFmt.formatToParts(parseHourKey(hour)).forEach(function (p) { parts[p.type] = p.value; });
+      var localDate = parts.year + "-" + parts.month + "-" + parts.day;
+      var localHour = parseInt(parts.hour, 10) % 24;
       if (!dayMap[localDate]) dayMap[localDate] = {};
       var total = 0;
       actionKeys.forEach(function (k) { total += hourlyData[hour][k] || 0; });
@@ -810,7 +844,7 @@
   if (typeof TRACKING_SNAPSHOT !== "undefined" && TRACKING_SNAPSHOT.detail) {
     render(TRACKING_SNAPSHOT.detail);
   } else if (THEME.trackUrl) {
-    fetch(THEME.trackUrl + "?detail=true", { method: "GET" })
+    fetch(THEME.trackUrl + "?detail=true" + hourlyDateParams(), { method: "GET" })
       .then(function (resp) {
         return resp.json();
       })

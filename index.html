@@ -93,9 +93,9 @@
     <header>
       <h1 id="headerTitle">SB Food Week 2026 <span>| TBD</span></h1>
       <div class="header-nav">
-        <a class="header-nav-link" href="/stats" target="_blank" rel="noopener"
-          >Stats</a
-        >
+        <span class="live-chip" id="liveChip" style="display: none" title="Restaurant views in the last 10 minutes">
+          <span class="live-chip-dot"></span>👀 <span id="liveChipCount">0</span> recent</span>
+        <a class="header-nav-link" href="/stats">Stats</a>
         <span class="header-nav-sep">|</span>
         <a class="about-link" id="aboutLink" href="#about">About</a>
       </div>
@@ -147,6 +147,19 @@
       <button class="mobile-toggle" id="mobileToggle">
         Show Restaurant List
       </button>
+
+      <!-- Mobile restaurant detail sheet — half height, map stays visible above -->
+      <div class="detail-sheet" id="detailSheet" aria-hidden="true">
+        <div class="detail-sheet-handle" id="detailSheetHandle"></div>
+        <button
+          class="detail-sheet-close"
+          id="detailSheetClose"
+          aria-label="Close detail"
+        >
+          &times;
+        </button>
+        <div class="detail-sheet-content" id="detailSheetContent"></div>
+      </div>
     </div>
 
     <!-- About modal -->
@@ -193,8 +206,6 @@
             id="aboutStats"
             class="about-link-card"
             href="/stats"
-            target="_blank"
-            rel="noopener"
           >
             <span class="about-link-icon">📊</span>
             <span class="about-link-label">Stats</span>
@@ -218,7 +229,7 @@
           <a
             id="aboutContact"
             class="about-link-card"
-            href="mailto:contact@example.com"
+            href="mailto:YOUR-CONTACT-EMAIL"
           >
             <span class="about-link-icon">✉️</span>
             <span class="about-link-label">Contact</span>
@@ -333,9 +344,15 @@
             src = "data.js";
           }
         }
-        var err = __dataYearOverride
-          ? ' onerror="window.location.replace(window.location.pathname)"'
-          : "";
+        var err;
+        if (__dataYearOverride) {
+          err = ' onerror="window.location.replace(window.location.pathname)"';
+        } else if (src !== "data.js") {
+          // this year's data file may not exist yet — fall back to the skeleton
+          err = " onerror=\"document.write('\\x3Cscript src=&quot;data.js&quot;>\\x3C/script>')\"";
+        } else {
+          err = "";
+        }
         document.write('<script src="' + src + '"' + err + "></" + "script>");
       })();
     </script>

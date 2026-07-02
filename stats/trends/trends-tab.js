@@ -77,24 +77,25 @@
     }
     if (!THEME.trackUrl) return Promise.resolve(null);
     var dateParams = "";
-    if (THEME.eventStartDate && THEME.eventEndDate) {
-      dateParams = "&start=" + encodeURIComponent(THEME.eventStartDate) + "&end=" + encodeURIComponent(THEME.eventEndDate);
+    var r = StatsUtils.getActiveRange();
+    if (r.start && r.end) {
+      dateParams = "&start=" + encodeURIComponent(r.start) + "&end=" + encodeURIComponent(r.end);
     }
     return fetch(THEME.trackUrl + "?hourly=true" + dateParams, { method: "GET" })
       .then(function (resp) { return resp.ok ? resp.json() : null; })
       .catch(function () { return null; });
   }
 
+  // Worker hour keys are UTC; label them on the event's clock
   function formatHour(isoStr) {
-    var d = new Date(isoStr);
+    var d = new Date(String(isoStr).replace(" ", "T") + "Z");
     if (isNaN(d.getTime())) return isoStr;
-    var month = d.getMonth();
-    var day = d.getDate();
-    var hour = d.getHours();
-    var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-    var ampm = hour >= 12 ? "pm" : "am";
-    var h = hour % 12 || 12;
-    return months[month] + " " + day + " " + h + ampm;
+    var out = {};
+    new Intl.DateTimeFormat("en-US", {
+      timeZone: THEME.timeZone,
+      month: "short", day: "numeric", hour: "numeric", hour12: true,
+    }).formatToParts(d).forEach(function (p) { out[p.type] = p.value; });
+    return out.month + " " + out.day + " " + out.hour + (out.dayPeriod === "AM" ? "am" : "pm");
   }
 
   function render(snapshots, hourlyData) {

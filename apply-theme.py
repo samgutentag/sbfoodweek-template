@@ -152,11 +152,17 @@ def update_og_png(cfg):
         return
 
     # Step 1: Render SVG to PNG (emoji will be blank)
-    subprocess.run(
-        ["magick", "-background", "none", "-density", "150",
-         svg_path, "-resize", "1200x630!", png_path],
-        check=True, capture_output=True,
-    )
+    try:
+        subprocess.run(
+            ["magick", "-background", "none", "-density", "150",
+             svg_path, "-resize", "1200x630!", png_path],
+            check=True, capture_output=True,
+        )
+    except subprocess.CalledProcessError as e:
+        # magick exists but can't render (commonly a missing font) — the PNG is
+        # a nice-to-have; don't abort the remaining theme rewrites over it
+        print(f"  WARNING: og-image.png render failed ({e.stderr.decode(errors='replace').strip().splitlines()[-1] if e.stderr else e}) — skipping PNG generation")
+        return
 
     # Step 2: Download Twemoji PNG for the emoji
     emoji = cfg["emoji"]
@@ -260,16 +266,26 @@ def update_index_html(cfg):
         html,
     )
 
-    # About modal: contact link href
+    # About modal: contact link href (placeholder when contactDomain is null so
+    # a previous event's address never survives a re-theme)
     contact_domain = cfg["contactDomain"]
-    if contact_domain:
-        year = (cfg["dataLiveDate"] or "")[:4] or time.strftime("%Y")
-        contact_email = f"sb{cfg['itemLabel']}week{year}@{contact_domain}"
-        html = re.sub(
-            r'(<a\s+id="aboutContact"[^>]*href=")[^"]*(")',
-            rf'\g<1>mailto:{contact_email}\g<2>',
-            html,
-        )
+    year = (cfg["dataLiveDate"] or "")[:4] or time.strftime("%Y")
+    contact_email = (
+        f"sb{cfg['itemLabel']}week{year}@{contact_domain}"
+        if contact_domain else "YOUR-CONTACT-EMAIL"
+    )
+    html = re.sub(
+        r'(<a\s+id="aboutContact"[^>]*href=")[^"]*(")',
+        rf'\g<1>mailto:{contact_email}\g<2>',
+        html,
+    )
+
+    # Full-map link (mobile map-only embed points back at the main site)
+    html = re.sub(
+        r'(href=")[^"]*(\?src=embed")',
+        rf'\g<1>{cfg["siteUrl"].rstrip("/")}/\g<2>',
+        html,
+    )
 
     # GitHub repo URL
     github_url = cfg["githubRepoUrl"]
@@ -384,6 +400,13 @@ def update_embed_index(cfg):
         html,
     )
 
+    # Mobile "open the full map" link
+    html = re.sub(
+        r'(<a\s+id="mobileFullMapLink"\s+href=")[^"]*(")',
+        rf'\g<1>{cfg["siteUrl"].rstrip("/")}/\g<2>',
+        html,
+    )
+
     with open(path, "w", encoding="utf-8") as f:
         f.write(html)
 
@@ -478,16 +501,26 @@ def update_embed_map_index(cfg):
         html,
     )
 
-    # About modal: contact link href
+    # About modal: contact link href (placeholder when contactDomain is null so
+    # a previous event's address never survives a re-theme)
     contact_domain = cfg["contactDomain"]
-    if contact_domain:
-        year = (cfg["dataLiveDate"] or "")[:4] or time.strftime("%Y")
-        contact_email = f"sb{cfg['itemLabel']}week{year}@{contact_domain}"
-        html = re.sub(
-            r'(<a\s+id="aboutContact"[^>]*href=")[^"]*(")',
-            rf'\g<1>mailto:{contact_email}\g<2>',
-            html,
-        )
+    year = (cfg["dataLiveDate"] or "")[:4] or time.strftime("%Y")
+    contact_email = (
+        f"sb{cfg['itemLabel']}week{year}@{contact_domain}"
+        if contact_domain else "YOUR-CONTACT-EMAIL"
+    )
+    html = re.sub(
+        r'(<a\s+id="aboutContact"[^>]*href=")[^"]*(")',
+        rf'\g<1>mailto:{contact_email}\g<2>',
+        html,
+    )
+
+    # Full-map link (mobile map-only embed points back at the main site)
+    html = re.sub(
+        r'(href=")[^"]*(\?src=embed")',
+        rf'\g<1>{cfg["siteUrl"].rstrip("/")}/\g<2>',
+        html,
+    )
 
     # GitHub repo URL
     github_url = cfg["githubRepoUrl"]

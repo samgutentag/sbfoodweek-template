@@ -90,6 +90,16 @@
     return [shifted.lat, shifted.lng];
   }
 
+  // Place a pin in the visible strip above the detail sheet (sheet covers the
+  // bottom ~58%, so pull the marker up into the top ~28% of the map).
+  function sheetOffsetLatLng(lat, lng, zoom) {
+    var mapHeight = map.getSize().y;
+    var point = map.project([lat, lng], zoom);
+    point.y += mapHeight * 0.28;
+    var shifted = map.unproject(point, zoom);
+    return [shifted.lat, shifted.lng];
+  }
+
   var tileLayer = L.tileLayer(
     "https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png",
     {
@@ -209,6 +219,10 @@
   var __eventState = getEventState();
   var __showUpvotes = __eventState !== "off-season";
   var __canVote = canCastVotes();
+
+  // The header "recent" chip is driven by the live eyes layer below (it shows
+  // the number of restaurants with eyes on the map), so the tile and the map
+  // always agree. See updateRecentChip().
 
   // ── Hours data ─────────────────────────────
   var hoursData = {};
@@ -408,6 +422,24 @@
     return html;
   }
 
+  // Returning-restaurant badge: shows for 2+ years of participation (first-timers get nothing).
+  function getReturningBadgeHtml(r) {
+    var hist = THEME.firstYearByName || {};
+    // strip any " (Location)" suffix so split multi-location pins still match
+    var base = r.name.replace(/\s*\([^)]*\)\s*$/, "");
+    var first = hist[base];
+    if (!first || !THEME.eventYear) return "";
+    var years = THEME.eventYear - first + 1;
+    if (years < 2) return "";
+    var s = ["th", "st", "nd", "rd"], v = years % 100;
+    var ord = years + (s[(v - 20) % 10] || s[v] || s[0]);
+    return (
+      '<span class="returning-badge" title="' +
+      escapeHtml(THEME.eventName + " since " + first) +
+      '">' + THEME.emoji + " " + ord + " year</span>"
+    );
+  }
+
   function createDietaryIconEls(r) {
     var frag = document.createDocumentFragment();
     tagDefs.forEach(function (t) {
@@ -454,7 +486,9 @@
       (dietaryHtml
         ? '<span class="dietary-tags">' + dietaryHtml + "</span>"
         : "") +
-      "</h3></div>";
+      "</h3>" +
+      getReturningBadgeHtml(r) +
+      "</div>";
     popupHtml += '<div class="popup-section popup-section-menu">';
     if (r.menuItems.length > 0)
       r.menuItems.forEach(function (item) {
@@ -478,7 +512,7 @@
     // Hours line in popup (rendered dynamically, populated after hoursData loads)
     popupHtml += '<div class="popup-hours" data-hours-name="' + escapeHtml(r.name) + '"></div>';
 
-    var shareUrl = THEME.siteUrl + "/#" + slugify(r.name);
+    var shareUrl = THEME.siteUrl + "/?src=share#" + slugify(r.name);
     popupHtml +=
       '<div class="popup-section popup-section-directions">' +
       '<div class="popup-section-heading">Address</div>' +
@@ -552,24 +586,140 @@
       "<span>Share this spot</span></a>";
     popupHtml += "</div>";
 
-    var popupMaxWidth = window.innerWidth > 768 ? 360 : 280;
-    marker.bindPopup(popupHtml, {
-      maxWidth: popupMaxWidth,
-      offset: [0, -4],
-      closeButton: false,
-    });
+    // Stash the detail markup so the mobile sheet can reuse it verbatim.
+    marker._detailHtml = popupHtml;
 
-    // Show popup and emoji overlay on hover
-    marker.on("mouseover", function () {
-      showEmojiOverlay([r.lat, r.lng]);
-      this.openPopup();
-    });
+    if (window.innerWidth <= 768) {
+      // Mobile: tap raises the half-height detail sheet; map stays visible.
+      marker.on("click", function () {
+        openDetailSheet(r, "map");
+      });
+    } else {
+      marker.bindPopup(popupHtml, {
+        maxWidth: 360,
+        offset: [0, -4],
+        closeButton: false,
+      });
+      // Show popup and emoji overlay on hover
+      marker.on("mouseover", function () {
+        showEmojiOverlay([r.lat, r.lng]);
+        this.openPopup();
+      });
+    }
 
     clusterGroup.addLayer(marker);
     markerMap.set(r.name, marker);
   });
 
   map.addLayer(clusterGroup);
+
+  // ── Live "eyes" layer — who's looking at each restaurant ───────
+  // A 10-minute sliding window of recent views per restaurant, shown as a
+  // pulsing 👀 badge over the pin (each new view keeps it alive another 10
+  // min). On dev hosts (LAN testing) it runs off a local simulation fed by
+  // your own taps plus a little ambient activity, since LAN views aren't
+  // logged. On prod it polls the worker's ?eyes=true endpoint.
+  var eyesLayer = L.layerGroup().addTo(map);
+  var __eyesDevHost = typeof isDevHost === "function" && isDevHost(location.hostname);
+  var EYES_WINDOW_MS = 10 * 60 * 1000;
+  var simViews = {}; // name -> [timestamps], dev simulation only
+
+  var lastEyeCounts = {};
+  function renderEyes(counts) {
+    if (counts) lastEyeCounts = counts;
+    counts = lastEyeCounts;
+    eyesLayer.clearLayers();
+    var totalViews = 0; // a view = a person looking; sum is the "recent" count
+    var placed = {}; // one eye per visible cluster/pin, so eyes cluster with pins
+    Object.keys(counts).forEach(function (name) {
+      var c = counts[name];
+      if (!c) return;
+      var marker = markerMap.get(name);
+      if (!marker) return;
+      totalViews += c;
+      // Pin the eye to whatever's actually visible — the marker if unclustered,
+      // or its cluster if it's bundled — and only one eye per visible thing.
+      var visible = clusterGroup.getVisibleParent(marker);
+      if (!visible) return;
+      var id = L.Util.stamp(visible);
+      if (placed[id]) return;
+      placed[id] = true;
+      var icon = L.divIcon({
+        className: "eye-badge-wrap",
+        html: '<span class="eye-badge">👀</span>',
+        iconSize: [0, 0],
+        iconAnchor: [0, 24],
+      });
+      L.marker(visible.getLatLng(), {
+        icon: icon,
+        interactive: false,
+        keyboard: false,
+        zIndexOffset: 2000,
+      }).addTo(eyesLayer);
+    });
+    updateRecentChip(totalViews);
+  }
+
+  // Header tile shows total recent restaurant views (last 10 min) — a faked
+  // "people looking" count off the rolling window. Self-hides when zero.
+  function updateRecentChip(n) {
+    var chip = document.getElementById("liveChip");
+    if (!chip) return;
+    var countEl = document.getElementById("liveChipCount");
+    if (n > 0) {
+      if (countEl) countEl.textContent = n;
+      chip.style.display = "";
+    } else {
+      chip.style.display = "none";
+    }
+  }
+
+  // Dev-only: record a local view so eyes appear while experimenting on the LAN.
+  function noteLocalView(name) {
+    if (!__eyesDevHost || !name) return;
+    (simViews[name] = simViews[name] || []).push(Date.now());
+  }
+
+  function getSimEyeCounts() {
+    var now = Date.now();
+    var out = {};
+    Object.keys(simViews).forEach(function (name) {
+      simViews[name] = simViews[name].filter(function (t) {
+        return now - t < EYES_WINDOW_MS;
+      });
+      if (simViews[name].length) out[name] = simViews[name].length;
+      else delete simViews[name];
+    });
+    return out;
+  }
+
+  function seedAmbientSimViews() {
+    var n = 1 + Math.floor(Math.random() * 2);
+    for (var i = 0; i < n; i++) {
+      noteLocalView(restaurants[Math.floor(Math.random() * restaurants.length)].name);
+    }
+  }
+
+  function fetchEyes() {
+    if (__eyesDevHost) {
+      if (Math.random() < 0.35) seedAmbientSimViews();
+      renderEyes(getSimEyeCounts());
+      return;
+    }
+    if (!THEME.trackUrl) return;
+    fetch(THEME.trackUrl + "?eyes=true", { method: "GET" })
+      .then(function (resp) { return resp.json(); })
+      .then(function (data) { renderEyes(data || {}); })
+      .catch(function () {});
+  }
+
+  if (__eyesDevHost) seedAmbientSimViews();
+  fetchEyes();
+  setInterval(fetchEyes, __eyesDevHost ? 5000 : 30000);
+  // Re-place eyes when clustering changes so they stay attached to what's
+  // visible (a cluster, or an individual pin) rather than scattering.
+  map.on("zoomend moveend", function () { renderEyes(); });
+  clusterGroup.on("animationend", function () { renderEyes(); });
 
   // ── Cluster hover tooltip ────────────────────
 
@@ -652,27 +802,13 @@
       var source = map._viewSource || "map";
       map._viewSource = null;
       window.track(source === "sidebar" ? "sidebar-view" : "view", h3.textContent);
+      if (currentUserArea) {
+        window.track("geo-view", currentUserArea + " | " + h3.textContent);
+      }
     }
 
     // Populate hours in popup
-    if (hoursLoaded) {
-      var hoursEl = popupEl && popupEl.querySelector(".popup-hours");
-      if (hoursEl) {
-        var hName = hoursEl.getAttribute("data-hours-name");
-        if (hName && hoursData[hName]) {
-          var popupStatus = getOpenStatus(hName);
-          var dot = popupStatus === "open" ? "🟢" : popupStatus === "closing-soon" ? "🟡" : "🔴";
-          var statusText = popupStatus === "open" ? "Open" : popupStatus === "closing-soon" ? "Closing Soon" : "Closed";
-          var todayStr = formatTodayHours(hName);
-          hoursEl.innerHTML =
-            '<span class="popup-hours-dot">' + dot + "</span> " +
-            "<strong>" + statusText + "</strong> · Today: " + todayStr;
-        } else if (hName && hoursData[hName] === null) {
-          hoursEl.innerHTML =
-            '<span class="popup-hours-dot">⚪</span> Hours not available';
-        }
-      }
-    }
+    populateHoursIn(popupEl);
 
     // Refresh upvote button state in the newly opened popup
     refreshOpenPopupUpvote();
@@ -715,6 +851,62 @@
     items.forEach(function (item) {
       item.classList.remove("active");
     });
+  });
+
+  // ── Mobile detail sheet ────────────────────────
+  // Reuses each marker's stashed detail markup. Every interactive control in
+  // that markup is document-delegated, so directions/share/upvote work here
+  // unchanged; only the hours line and upvote state need re-running per open.
+  var sheetOpenedAt = 0;
+  function openDetailSheet(r, source) {
+    var marker = markerMap.get(r.name);
+    var html = marker && marker._detailHtml;
+    var sheet = document.getElementById("detailSheet");
+    var content = document.getElementById("detailSheetContent");
+    if (!html || !sheet || !content) return;
+    content.innerHTML = html;
+    content.scrollTop = 0;
+    if (typeof window.track === "function") {
+      window.track(source === "sidebar" ? "sidebar-view" : "view", r.name);
+    }
+    noteLocalView(r.name); // dev sim: your tap lights up an eye on this pin
+    if (currentUserArea && typeof window.track === "function") {
+      // Neighborhood → restaurant pair (timestamped by the worker), for later
+      // "which areas want which spots" analysis.
+      window.track("geo-view", currentUserArea + " | " + r.name);
+    }
+    populateHoursIn(content);
+    refreshUpvoteIn(content);
+    sheet.classList.add("open");
+    sheet.setAttribute("aria-hidden", "false");
+    sheetOpenedAt = Date.now();
+    showEmojiOverlay([r.lat, r.lng]);
+    snapDrawerTo(0); // tuck the list drawer to peek behind the sheet
+    var z = Math.max(map.getZoom(), 15);
+    map.flyTo(sheetOffsetLatLng(r.lat, r.lng, z), z, { duration: 0.4 });
+  }
+
+  function closeDetailSheet() {
+    var sheet = document.getElementById("detailSheet");
+    if (!sheet || !sheet.classList.contains("open")) return;
+    sheet.classList.remove("open");
+    sheet.setAttribute("aria-hidden", "true");
+    removeEmojiOverlay();
+  }
+
+  var detailSheetCloseBtn = document.getElementById("detailSheetClose");
+  if (detailSheetCloseBtn) {
+    detailSheetCloseBtn.addEventListener("click", closeDetailSheet);
+  }
+  // Leaflet bubbles a marker click up to the map's "click", so ignore the map
+  // click that fires in the same gesture that opened the sheet — otherwise the
+  // sheet would close the instant it opens. Later map taps still dismiss it.
+  map.on("click", function () {
+    if (Date.now() - sheetOpenedAt < 400) return;
+    closeDetailSheet();
+  });
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape") closeDetailSheet();
   });
 
   // Popup link click handler (delegated) — track directions, website, phone
@@ -807,8 +999,34 @@
     updateSidebarUpvoteBadge(name);
   });
 
+  // Populate the hours line inside any container holding the detail markup
+  // (Leaflet popup or the mobile detail sheet).
+  function populateHoursIn(container) {
+    if (!hoursLoaded || !container) return;
+    var hoursEl = container.querySelector(".popup-hours");
+    if (!hoursEl) return;
+    var hName = hoursEl.getAttribute("data-hours-name");
+    if (hName && hoursData[hName]) {
+      var status = getOpenStatus(hName);
+      var dot = status === "open" ? "🟢" : status === "closing-soon" ? "🟡" : "🔴";
+      var statusText =
+        status === "open" ? "Open" : status === "closing-soon" ? "Closing Soon" : "Closed";
+      var todayStr = formatTodayHours(hName);
+      hoursEl.innerHTML =
+        '<span class="popup-hours-dot">' + dot + "</span> " +
+        "<strong>" + statusText + "</strong> · Today: " + todayStr;
+    } else if (hName && hoursData[hName] === null) {
+      hoursEl.innerHTML =
+        '<span class="popup-hours-dot">⚪</span> Hours not available';
+    }
+  }
+
   function refreshOpenPopupUpvote() {
-    var btn = document.querySelector(".leaflet-popup .upvote-btn");
+    refreshUpvoteIn(document.querySelector(".leaflet-popup"));
+  }
+
+  function refreshUpvoteIn(container) {
+    var btn = container && container.querySelector(".upvote-btn");
     if (!btn) return;
     var name = btn.getAttribute("data-name");
     if (!name) return;
@@ -950,6 +1168,24 @@
   });
   filtersEl.appendChild(hoursFilterSpan);
 
+  // Horizontal-scroll fade hints: fade whichever edge has more off-screen chips
+  // so the rows read as scrollable rather than a complete short list.
+  var filterRowEls = filtersEl.querySelectorAll(".filter-row");
+  function refreshFilterScrollHints() {
+    filterRowEls.forEach(function (row) {
+      var scrollable = row.scrollWidth - row.clientWidth > 2;
+      var atStart = row.scrollLeft <= 1;
+      var atEnd = row.scrollLeft + row.clientWidth >= row.scrollWidth - 1;
+      row.classList.toggle("fade-left", scrollable && !atStart);
+      row.classList.toggle("fade-right", scrollable && !atEnd);
+    });
+  }
+  filterRowEls.forEach(function (row) {
+    row.addEventListener("scroll", refreshFilterScrollHints, { passive: true });
+  });
+  window.addEventListener("resize", refreshFilterScrollHints);
+  requestAnimationFrame(refreshFilterScrollHints);
+
   var activeArea = null;
   var activeTag = null;
 
@@ -1036,6 +1272,8 @@
     if (willOpen && window.innerWidth <= 768 && currentStop < 2) {
       snapDrawerTo(2);
     }
+    // Rows have zero size while the panel is hidden, so refresh hints on open.
+    if (willOpen) requestAnimationFrame(refreshFilterScrollHints);
   });
 
   // ── Zoom reset control (below +/- buttons) ────
@@ -1064,6 +1302,85 @@
   });
   new L.Control.ZoomReset().addTo(map);
 
+  // ── "Use my location" control (nav arrow, below the reset button) ──
+  var userLocLayer = L.layerGroup().addTo(map);
+  var currentUserArea = null;
+  try {
+    currentUserArea = sessionStorage.getItem("user-area-val") || null;
+  } catch (e) {}
+
+  // Bucket a location to the nearest restaurant's neighborhood — coarse, never
+  // stored as raw coordinates. Far-off visitors bucket to "Outside SB".
+  function nearestUserArea(latlng) {
+    var bestArea = null;
+    var bestD = Infinity;
+    restaurants.forEach(function (r) {
+      var d = map.distance(latlng, [r.lat, r.lng]);
+      if (d < bestD) {
+        bestD = d;
+        bestArea = r.area;
+      }
+    });
+    return bestD > 8000 ? "Outside SB" : bestArea;
+  }
+
+  map.on("locationfound", function (e) {
+    userLocLayer.clearLayers();
+    L.circle(e.latlng, {
+      radius: Math.min(e.accuracy || 60, 400),
+      color: "#2a7de1",
+      weight: 1,
+      fillColor: "#2a7de1",
+      fillOpacity: 0.1,
+    }).addTo(userLocLayer);
+    L.circleMarker(e.latlng, {
+      radius: 7,
+      color: "#fff",
+      weight: 2,
+      fillColor: "#2a7de1",
+      fillOpacity: 1,
+    }).addTo(userLocLayer);
+
+    // Coarse, consented, anonymous: record only the neighborhood bucket, once
+    // per session. Also keep it for geo-view pair logging on subsequent views.
+    var area = nearestUserArea(e.latlng);
+    currentUserArea = area;
+    try {
+      sessionStorage.setItem("user-area-val", area);
+      if (!sessionStorage.getItem("ua-sampled") && typeof window.track === "function") {
+        window.track("user-area", area);
+        sessionStorage.setItem("ua-sampled", "1");
+      }
+    } catch (err) {}
+  });
+
+  map.on("locationerror", function () {
+    /* permission denied or unavailable — quietly no-op, button can be retried */
+  });
+
+  L.Control.Locate = L.Control.extend({
+    options: { position: "topleft" },
+    onAdd: function () {
+      var container = L.DomUtil.create("div", "leaflet-bar leaflet-control");
+      var btn = L.DomUtil.create("a", "", container);
+      btn.href = "#";
+      btn.title = "Use my location";
+      btn.setAttribute("role", "button");
+      btn.setAttribute("aria-label", "Use my location");
+      btn.innerHTML =
+        '<svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" style="vertical-align:middle"><path d="M3 11l19-9-9 19-2-8-8-2z"/></svg>';
+      btn.style.lineHeight = "30px";
+      btn.style.textAlign = "center";
+      L.DomEvent.disableClickPropagation(container);
+      L.DomEvent.on(btn, "click", function (ev) {
+        L.DomEvent.preventDefault(ev);
+        map.locate({ setView: true, maxZoom: 15, enableHighAccuracy: true });
+      });
+      return container;
+    },
+  });
+  new L.Control.Locate().addTo(map);
+
   function updateFilterBtnState() {
     var hasActiveFilters = activeArea || activeTag || activeHoursFilter || checklistMode;
     filterToggleBtn.classList.toggle("has-filters", hasActiveFilters);
@@ -1076,6 +1393,7 @@
   var searchBox = document.getElementById("searchBox");
 
   var searchTrackTimer = null;
+  var lastFilteredCount = 0;
   searchBox.addEventListener("input", function () {
     searchTerm = this.value.toLowerCase().trim();
     renderList();
@@ -1083,11 +1401,13 @@
     if (window.innerWidth <= 768 && searchTerm && currentStop < 1) {
       snapDrawerTo(1);
     }
-    // Track search queries (debounced, 2+ chars)
+    // Track search queries (debounced, 2+ chars). Also flag zero-result
+    // searches — they reveal missing spots, name mismatches, or feature gaps.
     clearTimeout(searchTrackTimer);
     if (searchTerm.length >= 2 && typeof window.track === "function") {
       searchTrackTimer = setTimeout(function () {
         window.track("search", searchTerm);
+        if (lastFilteredCount === 0) window.track("search-empty", searchTerm);
       }, 800);
     }
   });
@@ -1134,6 +1454,8 @@
     filtered.sort(function (a, b) {
       return a.name.localeCompare(b.name);
     });
+
+    lastFilteredCount = filtered.length;
 
     if (checklistMode) {
       var checkedCount = filtered.filter(function (r) {
@@ -1282,10 +1604,10 @@
 
       li.addEventListener("click", function () {
         map._viewSource = "sidebar";
-        var isMobile = window.innerWidth <= 768;
-        if (isMobile) {
-          // Snap drawer to peek so user can see the map and popup
-          snapDrawerTo(0);
+        if (window.innerWidth <= 768) {
+          // Mobile: open the detail sheet (it centers the pin and tucks the list)
+          openDetailSheet(r, "sidebar");
+          return;
         }
         map.flyTo(mobileOffsetLatLng(r.lat, r.lng, 17), 17, { duration: 0.8 });
 
@@ -1627,7 +1949,7 @@
     if (tipShareBtn) {
       tipShareBtn.addEventListener("click", function (e) {
         e.preventDefault();
-        var shareUrl = THEME.siteUrl + "/";
+        var shareUrl = THEME.siteUrl + "/?src=share";
         var shareTitle = THEME.eventName + " Map";
         if (typeof window.track === "function")
           window.track("tip-share", "tip-jar");
@@ -1933,6 +2255,18 @@
       drawerStops[currentStop] + "px",
     );
 
+    // Track the first drawer expansion per session (mobile only) — tells us
+    // whether phone users engage with the list/filters at all, which should
+    // shape the mobile layout.
+    if (currentStop >= 1 && window.innerWidth <= 768 && typeof window.track === "function") {
+      try {
+        if (!sessionStorage.getItem("drawer-expanded")) {
+          sessionStorage.setItem("drawer-expanded", "1");
+          window.track("drawer-expand", currentStop >= 2 ? "full" : "half");
+        }
+      } catch (e) {}
+    }
+
     // Haptic-style flash on drag handle
     sidebar.classList.add("snap-flash");
     setTimeout(function () {
@@ -2146,7 +2480,8 @@
     if (typeof window.track === "function") window.track("deeplink", r.name);
 
     if (window.innerWidth <= 768) {
-      snapDrawerTo(0);
+      openDetailSheet(r, "map");
+      return;
     }
     map.flyTo(mobileOffsetLatLng(r.lat, r.lng, 17), 17, { duration: 0.8 });
     // Short delay for cluster to resolve at new zoom

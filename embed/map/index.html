@@ -49,10 +49,6 @@
         <a class="about-link" id="embedStatsLink" href="/stats" target="_blank" rel="noopener">Stats</a>
         <span class="bar-sep">|</span>
         <a class="about-link" id="aboutLink" href="#about">About</a>
-        <span class="bar-sep">|</span>
-        <a id="embedFullMapLink" href="https://YOUR-DOMAIN.com/" target="_blank" rel="noopener"
-          >Open full map &nearr;</a
-        >
       </div>
     </div>
 
@@ -92,7 +88,7 @@
             <span class="about-link-label">GitHub</span>
             <span class="about-link-desc">View the code</span>
           </a>
-          <a id="aboutContact" class="about-link-card" href="mailto:contact@example.com">
+          <a id="aboutContact" class="about-link-card" href="mailto:YOUR-CONTACT-EMAIL">
             <span class="about-link-icon">✉️</span>
             <span class="about-link-label">Contact</span>
             <span class="about-link-desc">Feedback & corrections</span>
@@ -194,6 +190,16 @@
       <div id="map"></div>
     </div>
 
+    <!-- Footer CTA to the full searchable map (carries ?src=embed) -->
+    <a
+      id="embedFooterCta"
+      class="embed-footer-cta"
+      href="https://YOUR-DOMAIN.com/?src=embed"
+      target="_blank"
+      rel="noopener"
+      >Open full map &amp; search &nearr;</a
+    >
+
     <!-- Leaflet JS -->
     <script
       src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.min.js"
@@ -219,9 +225,15 @@
             src = "../../data.js";
           }
         }
-        var err = __dataYearOverride
-          ? ' onerror="window.location.replace(window.location.pathname)"'
-          : "";
+        var err;
+        if (__dataYearOverride) {
+          err = ' onerror="window.location.replace(window.location.pathname)"';
+        } else if (src !== "../../data.js") {
+          // this year's data file may not exist yet — fall back to the skeleton
+          err = " onerror=\"document.write('\\x3Cscript src=&quot;../../data.js&quot;>\\x3C/script>')\"";
+        } else {
+          err = "";
+        }
         document.write(
           "<script src=\"" + src + "\"" + err + "></" + "script>"
         );

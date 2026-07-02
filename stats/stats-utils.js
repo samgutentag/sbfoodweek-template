@@ -33,36 +33,87 @@ var StatsUtils = (function () {
     return map;
   }
 
-  // Filter hourly data keys to the event window (eventStartDate T00:00 through eventEndDate+1 T06:00)
-  function filterHourlyToEvent(hourlyData) {
-    if (!hourlyData || !THEME.eventStartDate || !THEME.eventEndDate) return hourlyData;
-    var start = new Date(THEME.eventStartDate + "T00:00:00");
-    var endPlusOne = new Date(THEME.eventEndDate + "T00:00:00");
-    endPlusOne.setDate(endPlusOne.getDate() + 1);
-    endPlusOne.setHours(6, 0, 0, 0); // allow late-night spillover
+  // Today's date on the event's clock (en-CA locale formats as YYYY-MM-DD)
+  function todayStr() {
+    try {
+      return new Date().toLocaleDateString("en-CA", { timeZone: THEME.timeZone });
+    } catch (e) {
+      return new Date().toISOString().slice(0, 10);
+    }
+  }
+
+  // Pure date-string arithmetic — pinned to UTC so the viewer's timezone
+  // can't shift the result across a day boundary
+  function addDays(ds, n) {
+    var d = new Date(ds + "T00:00:00Z");
+    d.setUTCDate(d.getUTCDate() + n);
+    return d.toISOString().slice(0, 10);
+  }
+
+  // Resolve the active stats date range from the ?range= URL param.
+  // Presets: "all" (default) | "event" | "pre". Returns concrete
+  // { preset, start, end } so the worker query, snapshot fetch, and hourly
+  // filter all window identically. "all" spans data-live → today, which is
+  // every day we have collected data.
+  function getActiveRange() {
+    var preset = "all";
+    try {
+      var p = new URLSearchParams(window.location.search).get("range");
+      if (p === "event" || p === "pre" || p === "post" || p === "all") preset = p;
+    } catch (e) {}
+    var live = THEME.dataLiveDate || THEME.eventStartDate || todayStr();
+    var start = live;
+    var end = todayStr();
+    if (preset === "event") {
+      start = THEME.eventStartDate || live;
+      end = THEME.eventEndDate || todayStr();
+    } else if (preset === "pre") {
+      start = live;
+      end = THEME.eventStartDate ? addDays(THEME.eventStartDate, -1) : todayStr();
+    } else if (preset === "post") {
+      start = THEME.eventEndDate ? addDays(THEME.eventEndDate, 1) : live;
+      end = todayStr();
+    }
+    return { preset: preset, start: start, end: end };
+  }
+
+  // Filter hourly data keys to a date range (defaults to the active range).
+  // End is inclusive through +1 day 6am to allow late-night spillover.
+  function filterHourlyToEvent(hourlyData, range) {
+    if (!hourlyData) return hourlyData;
+    range = range || getActiveRange();
+    if (!range.start && !range.end) return hourlyData;
+    // Range bounds are event-timezone days; hourly keys from the worker are UTC
+    var start = range.start ? eventDate(range.start, "00:00:00") : null;
+    var end = range.end ? eventDate(addDays(range.end, 1), "06:00:00") : null;
     var filtered = {};
     Object.keys(hourlyData).forEach(function (key) {
-      var d = new Date(key.replace(" ", "T"));
-      if (d >= start && d <= endPlusOne) {
+      var d = new Date(key.replace(" ", "T") + "Z");
+      if ((!start || d >= start) && (!end || d <= end)) {
         filtered[key] = hourlyData[key];
       }
     });
     return filtered;
   }
 
-  // Fetch all available daily snapshots
-  function fetchAllSnapshots(basePath) {
+  // Fetch all daily snapshots within a date range (defaults to active range).
+  // Snapshot files are named with the UTC date, so iterate UTC date strings
+  // (not local Date objects) and add a one-day buffer — otherwise a behind-UTC
+  // timezone misses the current day's snapshot.
+  function fetchAllSnapshots(basePath, range) {
     basePath = basePath || "../snapshots/";
-    var today = new Date();
-    var endCap = today;
-    if (THEME.eventEndDate) {
-      var dayAfterEnd = new Date(THEME.eventEndDate + "T00:00:00");
-      dayAfterEnd.setDate(dayAfterEnd.getDate() + 1);
-      if (dayAfterEnd < today) endCap = dayAfterEnd;
-    }
+    range = range || getActiveRange();
+    var startStr = range.start || THEME.dataLiveDate || THEME.eventStartDate;
+    var todayUTC = todayStr();
+    var endStr = range.end && range.end < todayUTC ? range.end : todayUTC;
+    endStr = addDays(endStr, 1); // buffer for UTC/local boundary
     var dates = [];
-    for (var d = new Date(THEME.eventStartDate); d <= endCap; d.setDate(d.getDate() + 1)) {
-      dates.push(d.toISOString().slice(0, 10));
+    var d = startStr;
+    var guard = 0;
+    while (d <= endStr && guard < 400) {
+      dates.push(d);
+      d = addDays(d, 1);
+      guard++;
     }
 
     var fetches = dates.map(function (ds) {
@@ -88,5 +139,6 @@ var StatsUtils = (function () {
     buildAreaByName: buildAreaByName,
     fetchAllSnapshots: fetchAllSnapshots,
     filterHourlyToEvent: filterHourlyToEvent,
+    getActiveRange: getActiveRange,
   };
 })();
