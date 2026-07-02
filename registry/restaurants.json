@@ -1,0 +1,1919 @@
+{
+  "areas": {
+    "Downtown": "#e63946",
+    "Funk Zone": "#f59e0b",
+    "Waterfront": "#0ea5e9",
+    "The Mesa": "#16a34a",
+    "Upper State": "#0891b2",
+    "Eastside": "#a21caf",
+    "Westside": "#db2777",
+    "Noleta": "#65a30d",
+    "Goleta": "#2d6a4f",
+    "Isla Vista": "#7b2cbf",
+    "Montecito": "#92400e",
+    "Summerland": "#0d9488",
+    "Carpinteria": "#1d3557",
+    "Santa Ynez Valley": "#6b7280"
+  },
+  "venues": {
+    "arnoldi-s": {
+      "name": "Arnoldi's",
+      "aka": [],
+      "website": "https://www.arnoldis.com/",
+      "phone": "805-962-5394",
+      "instagram": "arnoldiscafesb",
+      "locations": [
+        {
+          "label": null,
+          "address": "600 Olive St., Santa Barbara, CA",
+          "area": "Downtown",
+          "lat": 34.423278,
+          "lng": -119.691155,
+          "mapUrl": "https://maps.app.goo.gl/UUefNcGFbYjGUNPd7",
+          "appleMapsUrl": "https://maps.apple/p/U3gWeWbcVqKjsb"
+        }
+      ],
+      "participation": {
+        "sbburgerweek": 2026
+      }
+    },
+    "bistro-amasa": {
+      "name": "Bistro Amasa",
+      "aka": [],
+      "website": "https://www.bistroamasa.com/",
+      "phone": "805-500-7829",
+      "instagram": "bistroamasa",
+      "locations": [
+        {
+          "label": null,
+          "address": "1404 De La Vina St, Santa Barbara, CA 93101",
+          "area": "Downtown",
+          "lat": 34.423592,
+          "lng": -119.709243,
+          "mapUrl": "https://maps.app.goo.gl/MAozSBD7CEw2YWa88",
+          "appleMapsUrl": "https://maps.apple/p/yxJnNMQVvtIow4"
+        }
+      ],
+      "participation": {
+        "sbsandwichweek": 2026
+      }
+    },
+    "carp-moon-caf": {
+      "name": "Carp Moon Café",
+      "aka": [],
+      "website": "https://carpmooncafe.com/",
+      "phone": "(805) 318-9444",
+      "instagram": "carpmooncafe",
+      "locations": [
+        {
+          "label": null,
+          "address": "4991 Carpinteria Ave, Carpinteria, CA",
+          "area": "Carpinteria",
+          "lat": 34.3985,
+          "lng": -119.5188,
+          "mapUrl": "https://www.google.com/maps/search/?api=1&query=Carp+Moon+Cafe+4991+Carpinteria+Ave+Carpinteria+CA",
+          "appleMapsUrl": "https://maps.apple/p/RLgui_4iSBy68k"
+        }
+      ],
+      "participation": {
+        "sbcoffeeweek": 2026
+      }
+    },
+    "caya": {
+      "name": "Caya",
+      "aka": [],
+      "website": "https://www.cayarestaurant.com",
+      "phone": "805-964-1288",
+      "instagram": "cayarestaurant",
+      "locations": [
+        {
+          "label": null,
+          "address": "5650 Calle Real, Goleta, CA",
+          "area": "Goleta",
+          "lat": 34.441588,
+          "lng": -119.820858,
+          "mapUrl": "https://maps.app.goo.gl/KDWoCpGP4Bj5tKxG8",
+          "appleMapsUrl": "https://maps.apple/p/qsKhePr8N5NbRr"
+        }
+      ],
+      "participation": {
+        "sbburgerweek": 2026
+      }
+    },
+    "caya-restaurant": {
+      "name": "CAYA Restaurant",
+      "aka": [],
+      "website": "https://www.cayarestaurant.com",
+      "phone": "805-964-1288",
+      "instagram": "cayarestaurant",
+      "locations": [
+        {
+          "label": null,
+          "address": "5650 Calle Real, Goleta, CA",
+          "area": "Goleta",
+          "lat": 34.441588,
+          "lng": -119.820858,
+          "mapUrl": "https://maps.app.goo.gl/KDWoCpGP4Bj5tKxG8",
+          "appleMapsUrl": "https://maps.apple/p/qsKhePr8N5NbRr"
+        }
+      ],
+      "participation": {
+        "sbcoffeeweek": 2026
+      }
+    },
+    "caya-restaurant-and-bar": {
+      "name": "CAYA Restaurant and Bar",
+      "aka": [],
+      "website": "https://www.cayarestaurant.com",
+      "phone": "805-964-1288",
+      "instagram": "cayarestaurant",
+      "locations": [
+        {
+          "label": null,
+          "address": "5650 Calle Real, Goleta, CA 93117",
+          "area": "Goleta",
+          "lat": 34.44157,
+          "lng": -119.820872,
+          "mapUrl": "https://maps.app.goo.gl/hy7eoz1CqQ7Xjq9F9",
+          "appleMapsUrl": "https://maps.apple/p/H.v1vd~tsAimCc"
+        }
+      ],
+      "participation": {
+        "sbsandwichweek": 2025
+      }
+    },
+    "corner-tap": {
+      "name": "Corner Tap",
+      "aka": [],
+      "website": "https://www.sbcornertap.com",
+      "phone": "805-690-2739",
+      "instagram": "cornertapsb",
+      "locations": [
+        {
+          "label": null,
+          "address": "1905 Cliff Dr., Santa Barbara, CA",
+          "area": "The Mesa",
+          "lat": 34.401264,
+          "lng": -119.722428,
+          "mapUrl": "https://maps.app.goo.gl/Qsq2ycSkog53L7Pq9",
+          "appleMapsUrl": "https://maps.apple/p/DsZrwRqcd5gMWR"
+        }
+      ],
+      "participation": {
+        "sbburgerweek": 2026
+      }
+    },
+    "corner-tap-bar-eatery": {
+      "name": "Corner Tap Bar & Eatery",
+      "aka": [],
+      "website": "https://www.sbcornertap.com/",
+      "phone": "805-690-2739",
+      "instagram": "cornertapsb",
+      "locations": [
+        {
+          "label": null,
+          "address": "1905 Cliff Dr, Santa Barbara, CA 93109",
+          "area": "The Mesa",
+          "lat": 34.401264,
+          "lng": -119.722428,
+          "mapUrl": "https://www.google.com/maps/search/?api=1&query=Corner+Tap+Bar+%26+Eatery+1905+Cliff+Dr%2C+Santa+Barbara%2C+CA+93109",
+          "appleMapsUrl": "https://maps.apple/p/drXeRN68KTqAtp"
+        }
+      ],
+      "participation": {
+        "sbsandwichweek": 2026
+      }
+    },
+    "cristino-s-bakery": {
+      "name": "Cristino's Bakery",
+      "aka": [],
+      "website": "https://www.cristinosbakery.com/",
+      "phone": "805-455-6900",
+      "instagram": "cristinosbakery",
+      "locations": [
+        {
+          "label": null,
+          "address": "170 Aero Camino, Goleta, CA 93117",
+          "area": "Goleta",
+          "lat": 34.432364,
+          "lng": -119.84804,
+          "mapUrl": "https://maps.app.goo.gl/5ateAZg2XUFRejKn8",
+          "appleMapsUrl": "https://maps.apple/p/cgYQF1~aIWNyNN"
+        }
+      ],
+      "participation": {
+        "sbburgerweek": 2026,
+        "sbsandwichweek": 2025
+      }
+    },
+    "crushcakes": {
+      "name": "Crushcakes",
+      "aka": [],
+      "website": "https://www.crushcakes.com",
+      "phone": "805-963-9353",
+      "instagram": "crushcakescafe",
+      "locations": [
+        {
+          "label": null,
+          "address": "1315 Anacapa St., Santa Barbara, CA",
+          "area": "Downtown",
+          "lat": 34.425637,
+          "lng": -119.705214,
+          "mapUrl": "https://maps.app.goo.gl/BwkDspDsomjtTNk79",
+          "appleMapsUrl": "https://maps.apple/p/u2LdIBaUBhX.u.z"
+        }
+      ],
+      "participation": {
+        "sbburgerweek": 2026
+      }
+    },
+    "crushcakes-and-cafe": {
+      "name": "Crushcakes and Cafe",
+      "aka": [],
+      "website": "https://www.crushcakes.com",
+      "phone": "805-845-2780",
+      "instagram": "crushcakescafe",
+      "locations": [
+        {
+          "label": null,
+          "address": "5392 Hollister Ave., Goleta, CA",
+          "area": "Goleta",
+          "lat": 34.435346,
+          "lng": -119.812297,
+          "mapUrl": "https://maps.app.goo.gl/YXrd5iwBn4oCouXA9",
+          "appleMapsUrl": "https://maps.apple/p/Ir9WS14tYcDv6N"
+        }
+      ],
+      "participation": {
+        "sbburgerweek": 2026
+      }
+    },
+    "crushcakes-caf": {
+      "name": "Crushcakes & Café",
+      "aka": [],
+      "website": "https://www.crushcakes.com",
+      "phone": "805-845-2780",
+      "instagram": "crushcakescafe",
+      "locations": [
+        {
+          "label": "Anacapa",
+          "address": "1315 Anacapa St, Santa Barbara, CA",
+          "area": "Downtown",
+          "lat": 34.425637,
+          "lng": -119.705214,
+          "mapUrl": "https://maps.app.goo.gl/BwkDspDsomjtTNk79",
+          "appleMapsUrl": "https://maps.apple/p/u2LdIBaUBhX.u.z"
+        },
+        {
+          "label": "Hollister",
+          "address": "5392 Hollister Ave, Goleta, CA",
+          "area": "Goleta",
+          "lat": 34.435346,
+          "lng": -119.812297,
+          "mapUrl": "https://maps.app.goo.gl/YXrd5iwBn4oCouXA9",
+          "appleMapsUrl": "https://maps.apple/p/Ir9WS14tYcDv6N"
+        }
+      ],
+      "participation": {
+        "sbcoffeeweek": 2026
+      }
+    },
+    "crushcakes-cafe": {
+      "name": "Crushcakes & Cafe",
+      "aka": [],
+      "website": "https://www.crushcakes.com/",
+      "phone": "805-963-9353",
+      "instagram": "crushcakescafe",
+      "locations": [
+        {
+          "label": "Anacapa",
+          "address": "1315 Anacapa St, Santa Barbara, CA 93101",
+          "area": "Downtown",
+          "lat": 34.425637,
+          "lng": -119.705214,
+          "mapUrl": "https://www.google.com/maps/search/?api=1&query=Crushcakes+%26+Cafe+1315+Anacapa+St%2C+Santa+Barbara%2C+CA+93101",
+          "appleMapsUrl": "https://maps.apple/p/i.Eat4p7EGio7b"
+        },
+        {
+          "label": "Goleta",
+          "address": "5392 Hollister Ave, Goleta, CA 93117",
+          "area": "Goleta",
+          "lat": 34.435346,
+          "lng": -119.812297,
+          "mapUrl": "https://www.google.com/maps/search/?api=1&query=Crushcakes+%26+Cafe+5392+Hollister+Ave%2C+Goleta%2C+CA+93117",
+          "appleMapsUrl": "https://maps.apple/p/Ir9WS14tYcDv6N"
+        }
+      ],
+      "participation": {
+        "sbsandwichweek": 2025
+      }
+    },
+    "dang-burger": {
+      "name": "Dang Burger",
+      "aka": [],
+      "website": "https://www.dangburger.com",
+      "phone": null,
+      "instagram": "dang.burger",
+      "locations": [
+        {
+          "label": null,
+          "address": "5080 A Carpinteria Ave., Carpinteria, CA",
+          "area": "Carpinteria",
+          "lat": 34.398305,
+          "lng": -119.517345,
+          "mapUrl": "https://maps.app.goo.gl/7gdDkJgfhikYn82W6",
+          "appleMapsUrl": "https://maps.apple/p/wjhX3Jh.V2_I5p"
+        }
+      ],
+      "participation": {
+        "sbburgerweek": 2026
+      }
+    },
+    "dave-s-dogs-grill": {
+      "name": "Dave's Dogs Grill",
+      "aka": [],
+      "website": "https://www.davesdogs805.com/home",
+      "phone": "805-770-7772",
+      "instagram": "davesdogs805",
+      "locations": [
+        {
+          "label": null,
+          "address": "149 S Turnpike Rd., Santa Barbara, CA",
+          "area": "Noleta",
+          "lat": 34.43777,
+          "lng": -119.789698,
+          "mapUrl": "https://maps.app.goo.gl/3gGbzqPgfVrLvNJk8",
+          "appleMapsUrl": "https://maps.apple/p/JHLABwb8-a48tQ"
+        }
+      ],
+      "participation": {
+        "sbburgerweek": 2026
+      }
+    },
+    "dave-s-drip-house": {
+      "name": "Dave's Drip House",
+      "aka": [],
+      "website": "https://www.davesdriphouse.com",
+      "phone": "805-869-2128",
+      "instagram": null,
+      "locations": [
+        {
+          "label": null,
+          "address": "199 S Turnpike Rd, Ste 104, Santa Barbara, CA 93111",
+          "area": "Noleta",
+          "lat": 34.436845,
+          "lng": -119.789788,
+          "mapUrl": "https://maps.app.goo.gl/JDRM44nSK4kgjgQk6",
+          "appleMapsUrl": "https://maps.apple/p/o.JVvmeVW3PjqV"
+        }
+      ],
+      "participation": {
+        "sbsandwichweek": 2025
+      }
+    },
+    "del-pueblo-caf": {
+      "name": "Del Pueblo Café",
+      "aka": [],
+      "website": "http://dpcsb.com/",
+      "phone": "(805) 692-8800",
+      "instagram": "delpueblocafe",
+      "locations": [
+        {
+          "label": null,
+          "address": "5134 Hollister Ave, Goleta, CA",
+          "area": "Goleta",
+          "lat": 34.4353,
+          "lng": -119.8042,
+          "mapUrl": "https://www.google.com/maps/search/?api=1&query=Del+Pueblo+Cafe+5134+Hollister+Ave+Goleta+CA",
+          "appleMapsUrl": "https://maps.apple/p/~YLcAPTZauf3Cr"
+        }
+      ],
+      "participation": {
+        "sbcoffeeweek": 2026
+      }
+    },
+    "dom-s-taverna": {
+      "name": "Dom's Taverna",
+      "aka": [],
+      "website": "https://www.domstaverna.com/",
+      "phone": "805-724-4338",
+      "instagram": "domstaverna",
+      "locations": [
+        {
+          "label": null,
+          "address": "30 E. Victoria St., Santa Barbara, CA",
+          "area": "Downtown",
+          "lat": 34.424864,
+          "lng": -119.704726,
+          "mapUrl": "https://maps.app.goo.gl/C1E679wZKXZsSLpj8",
+          "appleMapsUrl": "https://maps.apple/p/xvK6mAKKw55U4p"
+        }
+      ],
+      "participation": {
+        "sbburgerweek": 2026
+      }
+    },
+    "downtown-eats": {
+      "name": "Downtown Eats",
+      "aka": [],
+      "website": "https://www.yelp.com/biz/downtown-eats-santa-barbara",
+      "phone": "805-453-9796",
+      "instagram": "downtowneats_sb",
+      "locations": [
+        {
+          "label": null,
+          "address": "634 State St., Santa Barbara, CA",
+          "area": "Downtown",
+          "lat": 34.418771,
+          "lng": -119.697599,
+          "mapUrl": "https://maps.app.goo.gl/Xk6icnj39UPAacR47",
+          "appleMapsUrl": "https://maps.apple/p/CH80ruBx0tokCj"
+        }
+      ],
+      "participation": {
+        "sbburgerweek": 2026
+      }
+    },
+    "dune-coffee": {
+      "name": "Dune Coffee",
+      "aka": [],
+      "website": "https://www.dunecoffee.com",
+      "phone": "(805) 968-0493",
+      "instagram": "dunecoffeeroasters",
+      "locations": [
+        {
+          "label": "Anacapa",
+          "address": "528 Anacapa St, Santa Barbara, CA",
+          "area": "Downtown",
+          "lat": 34.4178,
+          "lng": -119.6941,
+          "mapUrl": "https://www.google.com/maps/search/?api=1&query=Dune+Coffee+528+Anacapa+St+Santa+Barbara+CA",
+          "appleMapsUrl": "https://maps.apple/p/tNnJ9W5d1q~8wE"
+        },
+        {
+          "label": "Calle Real",
+          "address": "5915 Calle Real, Goleta, CA",
+          "area": "Goleta",
+          "lat": 34.4413,
+          "lng": -119.8306,
+          "mapUrl": "https://www.google.com/maps/search/?api=1&query=Dune+Coffee+5915+Calle+Real+Goleta+CA",
+          "appleMapsUrl": "https://maps.apple/p/awKaRJEIj4DbQo"
+        },
+        {
+          "label": "State St",
+          "address": "1101 State St, Santa Barbara, CA",
+          "area": "Downtown",
+          "lat": 34.4233,
+          "lng": -119.7043,
+          "mapUrl": "https://www.google.com/maps/search/?api=1&query=Dune+Coffee+1101+State+St+Santa+Barbara+CA",
+          "appleMapsUrl": "https://maps.apple/p/xLfeexdIXfx7jH"
+        },
+        {
+          "label": "Storke",
+          "address": "250 Storke Rd, Goleta, CA",
+          "area": "Goleta",
+          "lat": 34.433,
+          "lng": -119.8622,
+          "mapUrl": "https://www.google.com/maps/search/?api=1&query=Dune+Coffee+250+Storke+Rd+Goleta+CA",
+          "appleMapsUrl": "https://maps.apple/p/KrI96k-h7oVcXW"
+        }
+      ],
+      "participation": {
+        "sbcoffeeweek": 2026
+      }
+    },
+    "dutch-garden-restaurant": {
+      "name": "Dutch Garden Restaurant",
+      "aka": [],
+      "website": "https://www.dutchgardenrestaurant.com/",
+      "phone": "805-453-4556",
+      "instagram": "dutchgardensb",
+      "locations": [
+        {
+          "label": null,
+          "address": "4203 State St, Santa Barbara, CA 93110",
+          "area": "Upper State",
+          "lat": 34.440305,
+          "lng": -119.763331,
+          "mapUrl": "https://www.google.com/maps/search/?api=1&query=Dutch+Garden+Restaurant+4203+State+St%2C+Santa+Barbara%2C+CA+93110",
+          "appleMapsUrl": "https://maps.apple/p/R-~GCUUGInh6qY"
+        }
+      ],
+      "participation": {
+        "sbsandwichweek": 2025
+      }
+    },
+    "etty-s-jewish-deli-bakery": {
+      "name": "Etty's Jewish Deli & Bakery",
+      "aka": [],
+      "website": "https://www.jewishsantabarbara.org/deli/",
+      "phone": "805-957-1115",
+      "instagram": "ettysdeli",
+      "locations": [
+        {
+          "label": null,
+          "address": "524 Chapala St, Santa Barbara, CA 93101",
+          "area": "Downtown",
+          "lat": 34.416639,
+          "lng": -119.697143,
+          "mapUrl": "https://www.google.com/maps/search/?api=1&query=Etty%27s+Jewish+Deli+%26+Bakery+524+Chapala+St%2C+Santa+Barbara%2C+CA+93101",
+          "appleMapsUrl": "https://maps.apple/p/tNRY0cWUwsfRTC"
+        }
+      ],
+      "participation": {
+        "sbsandwichweek": 2026
+      }
+    },
+    "eureka": {
+      "name": "Eureka!",
+      "aka": [],
+      "website": "https://eurekarestaurantgroup.com/locations/santa-barbara",
+      "phone": "805-618-3388",
+      "instagram": "eurekasantabarbara",
+      "locations": [
+        {
+          "label": null,
+          "address": "601 Paseo Nuevo, Santa Barbara, CA",
+          "area": "Downtown",
+          "lat": 34.418597,
+          "lng": -119.700307,
+          "mapUrl": "https://maps.app.goo.gl/Gsya1VEdNZBjPmoD8",
+          "appleMapsUrl": "https://maps.apple/p/o6XV_nkn5Yobot"
+        }
+      ],
+      "participation": {
+        "sbburgerweek": 2026
+      }
+    },
+    "finch-and-fork": {
+      "name": "Finch and Fork",
+      "aka": [],
+      "website": "https://www.finchandforkrestaurant.com/",
+      "phone": "805-879-9100",
+      "instagram": "finchandfork",
+      "locations": [
+        {
+          "label": null,
+          "address": "31 W. Carrillo St., Santa Barbara, CA",
+          "area": "Downtown",
+          "lat": 34.420427,
+          "lng": -119.702788,
+          "mapUrl": "https://maps.app.goo.gl/ypafV2iQED8v5vYeA",
+          "appleMapsUrl": "https://maps.apple/p/P6GFr7sFA.Xmp-"
+        }
+      ],
+      "participation": {
+        "sbburgerweek": 2026
+      }
+    },
+    "fresco-at-the-market": {
+      "name": "Fresco At The Market",
+      "aka": [
+        "Fresco at the Market"
+      ],
+      "website": "https://www.fresco-sb.com/",
+      "phone": "805-770-7994",
+      "instagram": "fresco_sb",
+      "locations": [
+        {
+          "label": null,
+          "address": "38 W Victoria St, Ste 102, Santa Barbara, CA 93101",
+          "area": "Downtown",
+          "lat": 34.423601,
+          "lng": -119.707027,
+          "mapUrl": "https://maps.app.goo.gl/a7gmQtRfSGiXUdR37",
+          "appleMapsUrl": "https://maps.apple/p/2vk0daDa8-pGTx"
+        }
+      ],
+      "participation": {
+        "sbburgerweek": 2026,
+        "sbsandwichweek": 2026
+      }
+    },
+    "gala": {
+      "name": "Gala",
+      "aka": [],
+      "website": "https://www.galasb.com/",
+      "phone": "805-869-2813",
+      "instagram": "galarestaurantsb",
+      "locations": [
+        {
+          "label": null,
+          "address": "705 Anacapa St., Santa Barbara, CA",
+          "area": "Downtown",
+          "lat": 34.41977,
+          "lng": -119.697264,
+          "mapUrl": "https://maps.app.goo.gl/5z5GXb8SGmx14QGn8",
+          "appleMapsUrl": "https://maps.apple/p/hFLAzvWWQkJEUn"
+        }
+      ],
+      "participation": {
+        "sbburgerweek": 2026
+      }
+    },
+    "gino-s-sicilian-express": {
+      "name": "Gino's Sicilian Express",
+      "aka": [],
+      "website": "https://www.ginospizzapies.com/",
+      "phone": "805-962-9442",
+      "instagram": null,
+      "locations": [
+        {
+          "label": null,
+          "address": "12 W Figueroa St, Santa Barbara, CA 93101",
+          "area": "Downtown",
+          "lat": 34.422147,
+          "lng": -119.703687,
+          "mapUrl": "https://www.google.com/maps/search/?api=1&query=Gino%27s+Sicilian+Express+12+W+Figueroa+St%2C+Santa+Barbara%2C+CA+93101",
+          "appleMapsUrl": "https://maps.apple/p/QjQ7vnIg6KLvrm"
+        }
+      ],
+      "participation": {
+        "sbsandwichweek": 2025
+      }
+    },
+    "goat-tree": {
+      "name": "Goat Tree",
+      "aka": [],
+      "website": "https://www.hotelcalifornian.com/goat-tree.htm",
+      "phone": "805-882-0137",
+      "instagram": "hotelcalifornian",
+      "locations": [
+        {
+          "label": null,
+          "address": "36 State St., Santa Barbara, CA",
+          "area": "Funk Zone",
+          "lat": 34.413505,
+          "lng": -119.690624,
+          "mapUrl": "https://maps.app.goo.gl/h4TARh9WuJcSLujF9",
+          "appleMapsUrl": "https://maps.apple/p/PcPGZE_I~qS5LH"
+        }
+      ],
+      "participation": {
+        "sbburgerweek": 2026
+      }
+    },
+    "goodland-waffles-and-melts": {
+      "name": "Goodland Waffles and Melts",
+      "aka": [],
+      "website": "https://www.goodlandwaffles.com/",
+      "phone": "805-259-4356",
+      "instagram": "goodlandwafflesandmelts",
+      "locations": [
+        {
+          "label": null,
+          "address": "1131 State St, Santa Barbara, CA 93101",
+          "area": "Downtown",
+          "lat": 34.423001,
+          "lng": -119.704381,
+          "mapUrl": "https://www.google.com/maps/search/?api=1&query=Goodland+Waffles+and+Melts+1131+State+St%2C+Santa+Barbara%2C+CA+93101",
+          "appleMapsUrl": "https://maps.apple/p/JDAsQTQIrTFcnm"
+        }
+      ],
+      "participation": {
+        "sbsandwichweek": 2026
+      }
+    },
+    "goodland-waffles-melts": {
+      "name": "Goodland Waffles & Melts",
+      "aka": [],
+      "website": "https://www.goodlandwaffles.com/",
+      "phone": "(805) 259-4356",
+      "instagram": "goodlandwaffles",
+      "locations": [
+        {
+          "label": null,
+          "address": "1131 State St, Santa Barbara, CA",
+          "area": "Downtown",
+          "lat": 34.4238,
+          "lng": -119.7049,
+          "mapUrl": "https://www.google.com/maps/search/?api=1&query=Goodland+Waffles+and+Melts+1131+State+St+Santa+Barbara+CA",
+          "appleMapsUrl": "https://maps.apple/p/9j2N9nG.wLDQk2"
+        }
+      ],
+      "participation": {
+        "sbcoffeeweek": 2026
+      }
+    },
+    "haas-s-fine-ice-cream": {
+      "name": "Haas's Fine Ice Cream",
+      "aka": [],
+      "website": null,
+      "phone": "805-793-1271",
+      "instagram": null,
+      "locations": [
+        {
+          "label": null,
+          "address": "3987 State St, Ste B, Santa Barbara, CA 93105",
+          "area": "Upper State",
+          "lat": 34.439525,
+          "lng": -119.751625,
+          "mapUrl": "https://www.google.com/maps/search/?api=1&query=Haas%27s+Fine+Ice+Cream+3987+State+St%2C+Ste+B%2C+Santa+Barbara%2C+CA+93105",
+          "appleMapsUrl": "https://maps.apple/p/7kPAVN3NA9ILjI"
+        }
+      ],
+      "participation": {
+        "sbsandwichweek": 2026
+      }
+    },
+    "home-plate-grill": {
+      "name": "Home Plate Grill",
+      "aka": [],
+      "website": "https://www.homeplategoleta.com",
+      "phone": "805-845-3323",
+      "instagram": "homeplate805",
+      "locations": [
+        {
+          "label": null,
+          "address": "7398 Calle Real #C, Goleta, CA",
+          "area": "Goleta",
+          "lat": 34.43355,
+          "lng": -119.884676,
+          "mapUrl": "https://maps.app.goo.gl/Y5UCLYBhX1y4vxY18",
+          "appleMapsUrl": "https://maps.apple/p/6Zw5j8CDzQhADd"
+        }
+      ],
+      "participation": {
+        "sbburgerweek": 2026
+      }
+    },
+    "hook-press-donuts": {
+      "name": "Hook & Press Donuts",
+      "aka": [],
+      "website": "https://www.hookandpressdonuts.com/",
+      "phone": "805-869-6635",
+      "instagram": "hookandpressdonuts",
+      "locations": [
+        {
+          "label": null,
+          "address": "15 E Figueroa St, Santa Barbara, CA 93101",
+          "area": "Downtown",
+          "lat": 34.423094,
+          "lng": -119.702845,
+          "mapUrl": "https://www.google.com/maps/search/?api=1&query=Hook+%26+Press+Donuts+15+E+Figueroa+St%2C+Santa+Barbara%2C+CA+93101",
+          "appleMapsUrl": "https://maps.apple/p/hVCiyL.8-fjT9R"
+        }
+      ],
+      "participation": {
+        "sbsandwichweek": 2026
+      }
+    },
+    "i-v-deli-mart": {
+      "name": "I.V. Deli Mart",
+      "aka": [],
+      "website": "https://ivdelimart.com/",
+      "phone": "805-562-8858",
+      "instagram": "ivdelimart",
+      "locations": [
+        {
+          "label": null,
+          "address": "6553 Pardall Rd, Isla Vista, CA 93117",
+          "area": "Isla Vista",
+          "lat": 34.412906,
+          "lng": -119.856403,
+          "mapUrl": "https://www.google.com/maps/search/?api=1&query=I.V.+Deli+Mart+6553+Pardall+Rd%2C+Isla+Vista%2C+CA+93117",
+          "appleMapsUrl": "https://maps.apple/p/FWJFFqzq8xKPog"
+        }
+      ],
+      "participation": {
+        "sbsandwichweek": 2026
+      }
+    },
+    "islands-fine-burgers-drinks": {
+      "name": "Islands Fine Burgers & Drinks",
+      "aka": [],
+      "website": "https://www.islandsrestaurants.com",
+      "phone": "805-946-0044",
+      "instagram": "islandsburgers",
+      "locations": [
+        {
+          "label": null,
+          "address": "3825 State St. Space E-149, Santa Barbara, CA",
+          "area": "Upper State",
+          "lat": 34.438006,
+          "lng": -119.748441,
+          "mapUrl": "https://maps.app.goo.gl/qBiuwTnxZLJBDouK9",
+          "appleMapsUrl": "https://maps.apple/p/NTQ.NjBT-8oA2L"
+        }
+      ],
+      "participation": {
+        "sbburgerweek": 2026
+      }
+    },
+    "iv-deli-mart": {
+      "name": "IV Deli Mart",
+      "aka": [],
+      "website": "https://www.facebook.com/ivdelimart",
+      "phone": "+1 (805) 562-8858",
+      "instagram": "ivdelimart",
+      "locations": [
+        {
+          "label": null,
+          "address": "6553 Pardall Rd., Isla Vista, CA",
+          "area": "Isla Vista",
+          "lat": 34.412906,
+          "lng": -119.856403,
+          "mapUrl": "https://maps.app.goo.gl/3ywpf2asZSic4c6f8",
+          "appleMapsUrl": "https://maps.apple/p/P8CHoGZ8.n~99_"
+        }
+      ],
+      "participation": {
+        "sbburgerweek": 2026
+      }
+    },
+    "jonesy-s-fried-chicken": {
+      "name": "Jonesy's Fried Chicken",
+      "aka": [],
+      "website": "https://jonesysfriedchicken.com/",
+      "phone": "805-571-7060",
+      "instagram": "jonesysfriedchicken",
+      "locations": [
+        {
+          "label": null,
+          "address": "282 Orange Ave, Goleta, CA 93117",
+          "area": "Goleta",
+          "lat": 34.434138,
+          "lng": -119.828632,
+          "mapUrl": "https://maps.app.goo.gl/tQ7zzEVcJvqCFVYn6",
+          "appleMapsUrl": "https://maps.apple/p/N29hUdX_BJDsDw"
+        }
+      ],
+      "participation": {
+        "sbburgerweek": 2026,
+        "sbsandwichweek": 2026
+      }
+    },
+    "kyle-s-kitchen": {
+      "name": "Kyle's Kitchen",
+      "aka": [],
+      "website": "https://www.kyleskitchen.com",
+      "phone": "805-845-2260",
+      "instagram": "kyleskitchensb",
+      "locations": [
+        {
+          "label": "Hollister",
+          "address": "7000 Hollister Ave., Goleta, CA",
+          "area": "Goleta",
+          "lat": 34.430453,
+          "lng": -119.872319,
+          "mapUrl": "https://maps.app.goo.gl/7mobFJW4rD6S8gZc8",
+          "appleMapsUrl": "https://maps.apple/p/pY1SoTqf10FswS"
+        },
+        {
+          "label": "Calle Real",
+          "address": "5723 Calle Real, Goleta, CA",
+          "area": "Goleta",
+          "lat": 34.44078,
+          "lng": -119.82405,
+          "mapUrl": "https://maps.app.goo.gl/pwHJn1FJksgvYt3A9",
+          "appleMapsUrl": "https://maps.apple/p/dw.tRLQFoqQ~rH"
+        }
+      ],
+      "participation": {
+        "sbburgerweek": 2026
+      }
+    },
+    "lighthouse-coffee": {
+      "name": "Lighthouse Coffee",
+      "aka": [],
+      "website": "https://www.lighthousecoffeesb.com/",
+      "phone": "805-679-5153",
+      "instagram": "lighthousecoffee",
+      "locations": [
+        {
+          "label": "Cliff Dr",
+          "address": "1819 Cliff Dr, Santa Barbara, CA 93109",
+          "area": "The Mesa",
+          "lat": 34.401054,
+          "lng": -119.721558,
+          "mapUrl": "https://www.google.com/maps/search/?api=1&query=Lighthouse+Coffee+1819+Cliff+Dr%2C+Santa+Barbara%2C+CA+93109",
+          "appleMapsUrl": "https://maps.apple/p/_B5R4m.DfPDp4b"
+        },
+        {
+          "label": "Chapala",
+          "address": "711 Chapala St, Santa Barbara, CA 93101",
+          "area": "Downtown",
+          "lat": 34.417703,
+          "lng": -119.699901,
+          "mapUrl": "https://www.google.com/maps/search/?api=1&query=Lighthouse+Coffee+711+Chapala+St%2C+Santa+Barbara%2C+CA+93101",
+          "appleMapsUrl": "https://maps.apple/p/bnsD57DGuoari4"
+        },
+        {
+          "label": "Haley",
+          "address": "401 E Haley St, Santa Barbara, CA",
+          "area": "Eastside",
+          "lat": 34.4199,
+          "lng": -119.6914,
+          "mapUrl": "https://www.google.com/maps/search/?api=1&query=Lighthouse+Coffee+401+E+Haley+St+Santa+Barbara+CA",
+          "appleMapsUrl": "https://maps.apple/p/-K~6RHP2Cm18yQ"
+        },
+        {
+          "label": "Turnpike",
+          "address": "199 S Turnpike Rd #101, Goleta, CA 93111",
+          "area": "Noleta",
+          "lat": 34.436837,
+          "lng": -119.789826,
+          "mapUrl": "https://www.google.com/maps/search/?api=1&query=Lighthouse+Coffee+199+S+Turnpike+Rd+%23101%2C+Goleta%2C+CA+93111",
+          "appleMapsUrl": "https://maps.apple/p/yxZSb2gs85EE-p"
+        },
+        {
+          "label": "Calle Real",
+          "address": "5696 Calle Real, Goleta, CA 93117",
+          "area": "Goleta",
+          "lat": 34.441691,
+          "lng": -119.824031,
+          "mapUrl": "https://www.google.com/maps/search/?api=1&query=Lighthouse+Coffee+5696+Calle+Real%2C+Goleta%2C+CA+93117",
+          "appleMapsUrl": "https://maps.apple/p/KHjJHTpFwCpXw7"
+        },
+        {
+          "label": "E Haley",
+          "address": "401 E Haley St, Santa Barbara, CA 93101",
+          "area": "Eastside",
+          "lat": 34.4214,
+          "lng": -119.691171,
+          "mapUrl": "https://www.google.com/maps/search/?api=1&query=Lighthouse+Coffee+401+E+Haley+St%2C+Santa+Barbara%2C+CA+93101",
+          "appleMapsUrl": "https://maps.apple/p/-K~6RHP2Cm18yQ"
+        }
+      ],
+      "participation": {
+        "sbcoffeeweek": 2026,
+        "sbsandwichweek": 2026
+      }
+    },
+    "little-bird-kitchen": {
+      "name": "Little Bird Kitchen",
+      "aka": [],
+      "website": "https://www.littlebirdsb.com",
+      "phone": "805-303-7865",
+      "instagram": "littlebird_sb",
+      "locations": [
+        {
+          "label": null,
+          "address": "38 W. Victoria St., Santa Barbara, CA",
+          "area": "Downtown",
+          "lat": 34.423532,
+          "lng": -119.70699,
+          "mapUrl": "https://maps.app.goo.gl/2y4qVPcjub2o29dKA",
+          "appleMapsUrl": "https://maps.apple/p/mC3RDF86ZgNghN"
+        }
+      ],
+      "participation": {
+        "sbburgerweek": 2026
+      }
+    },
+    "lucky-llama-coffee-house": {
+      "name": "Lucky Llama Coffee House",
+      "aka": [],
+      "website": "https://www.luckyllamacoffee.com/",
+      "phone": "(805) 684-8811",
+      "instagram": "luckyllamacoffee",
+      "locations": [
+        {
+          "label": null,
+          "address": "5100 Carpinteria Ave, Carpinteria, CA",
+          "area": "Carpinteria",
+          "lat": 34.3983,
+          "lng": -119.5172,
+          "mapUrl": "https://www.google.com/maps/search/?api=1&query=Lucky+Llama+Coffee+House+5100+Carpinteria+Ave+Carpinteria+CA",
+          "appleMapsUrl": "https://maps.apple/p/NJtuNiw7Uf4gYy"
+        }
+      ],
+      "participation": {
+        "sbcoffeeweek": 2026
+      }
+    },
+    "marisella": {
+      "name": "Marisella",
+      "aka": [],
+      "website": "https://www.marisellarestaurant.com/",
+      "phone": "(805) 505-8888",
+      "instagram": "marisellasb",
+      "locations": [
+        {
+          "label": null,
+          "address": "8301 Hollister Ave, Goleta, CA",
+          "area": "Goleta",
+          "lat": 34.4247,
+          "lng": -119.905,
+          "mapUrl": "https://www.google.com/maps/search/?api=1&query=Marisella+Ritz+Carlton+Bacara+8301+Hollister+Ave+Goleta+CA",
+          "appleMapsUrl": "https://maps.apple/p/KbZcG_MobzFMzH"
+        }
+      ],
+      "participation": {
+        "sbcoffeeweek": 2026
+      }
+    },
+    "mesa-burger": {
+      "name": "Mesa Burger",
+      "aka": [],
+      "website": "https://www.mesaburger.com/",
+      "phone": "805-963-7492",
+      "instagram": null,
+      "locations": [
+        {
+          "label": null,
+          "address": "315 Meigs Rd, Ste F, Santa Barbara, CA 93109",
+          "area": "The Mesa",
+          "lat": 34.400806,
+          "lng": -119.722701,
+          "mapUrl": "https://maps.app.goo.gl/g2QpAoPb1cGtsjrZ8",
+          "appleMapsUrl": "https://maps.apple/p/xNWR2B-r3FiBxf"
+        }
+      ],
+      "participation": {
+        "sbburgerweek": 2026,
+        "sbsandwichweek": 2026
+      }
+    },
+    "mission-city-sandwich-shop": {
+      "name": "Mission City Sandwich Shop",
+      "aka": [],
+      "website": "https://www.missioncitysandwichshop.com/",
+      "phone": "805-869-2253",
+      "instagram": "missioncity_sandwichshop",
+      "locations": [
+        {
+          "label": null,
+          "address": "1826 Cliff Dr, Ste A, Santa Barbara, CA 93109",
+          "area": "The Mesa",
+          "lat": 34.40177,
+          "lng": -119.721344,
+          "mapUrl": "https://www.google.com/maps/search/?api=1&query=Mission+City+Sandwich+Shop+1826+Cliff+Dr%2C+Ste+A%2C+Santa+Barbara%2C+CA+93109",
+          "appleMapsUrl": "https://maps.apple/p/mV9afeykbL~uHJ"
+        }
+      ],
+      "participation": {
+        "sbsandwichweek": 2025
+      }
+    },
+    "noe-s-cafe": {
+      "name": "Noe's Cafe",
+      "aka": [],
+      "website": null,
+      "phone": null,
+      "instagram": "noescafesb",
+      "locations": [
+        {
+          "label": null,
+          "address": "129 E Anapamu St, Santa Barbara, CA 93101",
+          "area": "Downtown",
+          "lat": 34.425305,
+          "lng": -119.702695,
+          "mapUrl": "https://www.google.com/maps/search/?api=1&query=Noe%27s+Cafe+129+E+Anapamu+St%2C+Santa+Barbara%2C+CA+93101",
+          "appleMapsUrl": "https://maps.apple/p/Byzog8rFTN4Kt8"
+        }
+      ],
+      "participation": {
+        "sbsandwichweek": 2026
+      }
+    },
+    "norton-s-pastrami-deli": {
+      "name": "Norton's Pastrami & Deli",
+      "aka": [],
+      "website": "https://nortonsdeli.com/",
+      "phone": "805-965-3210",
+      "instagram": null,
+      "locations": [
+        {
+          "label": null,
+          "address": "18 W Figueroa St, Santa Barbara, CA 93101",
+          "area": "Downtown",
+          "lat": 34.421999,
+          "lng": -119.703831,
+          "mapUrl": "https://www.google.com/maps/search/?api=1&query=Norton%27s+Pastrami+%26+Deli+18+W+Figueroa+St%2C+Santa+Barbara%2C+CA+93101",
+          "appleMapsUrl": "https://maps.apple/p/2m5Uk_~34Saba0"
+        }
+      ],
+      "participation": {
+        "sbsandwichweek": 2025
+      }
+    },
+    "padaro-beach-grill": {
+      "name": "Padaro Beach Grill",
+      "aka": [],
+      "website": "https://www.padarobeachgrill.com",
+      "phone": "805-566-9800",
+      "instagram": "padarobeachgrill",
+      "locations": [
+        {
+          "label": null,
+          "address": "3765 Santa Claus Lane, Carpinteria, CA",
+          "area": "Carpinteria",
+          "lat": 34.406855,
+          "lng": -119.548572,
+          "mapUrl": "https://maps.app.goo.gl/8ZDu63gFeurVYCeM6",
+          "appleMapsUrl": "https://maps.apple/p/uqiyiVKwDzDndx"
+        }
+      ],
+      "participation": {
+        "sbburgerweek": 2026
+      }
+    },
+    "paloma": {
+      "name": "Paloma",
+      "aka": [],
+      "website": "https://www.palomabar.com",
+      "phone": "805-966-9090",
+      "instagram": "paloma_sb",
+      "locations": [
+        {
+          "label": null,
+          "address": "702 Anacapa St, Santa Barbara, CA",
+          "area": "Downtown",
+          "lat": 34.4197,
+          "lng": -119.6968,
+          "mapUrl": "https://www.google.com/maps/search/?api=1&query=Paloma+702+Anacapa+St+Santa+Barbara+CA",
+          "appleMapsUrl": "https://maps.apple/p/IZz6.kmGN4tvm.z"
+        }
+      ],
+      "participation": {
+        "sbcoffeeweek": 2026
+      }
+    },
+    "panino": {
+      "name": "Panino",
+      "aka": [],
+      "website": "https://www.paninorestaurants.com",
+      "phone": "805-963-3700",
+      "instagram": null,
+      "locations": [
+        {
+          "label": "Santa Barbara",
+          "address": "834 Santa Barbara St, Santa Barbara, CA 93101",
+          "area": "Downtown",
+          "lat": 34.422692,
+          "lng": -119.697992,
+          "mapUrl": "https://www.google.com/maps/search/?api=1&query=Panino+834+Santa+Barbara+St%2C+Santa+Barbara%2C+CA+93101",
+          "appleMapsUrl": "https://maps.apple/p/.AbyfjRB9KC2~a"
+        },
+        {
+          "label": "Montecito",
+          "address": "1014 Coast Village Rd, Montecito, CA 93108",
+          "area": "Montecito",
+          "lat": 34.42263,
+          "lng": -119.651664,
+          "mapUrl": "https://www.google.com/maps/search/?api=1&query=Panino+1014+Coast+Village+Rd%2C+Montecito%2C+CA+93108",
+          "appleMapsUrl": "https://maps.apple/p/PEFXkVb1_iwb9K"
+        },
+        {
+          "label": "Goleta",
+          "address": "5666 Calle Real, Goleta, CA 93117",
+          "area": "Goleta",
+          "lat": 34.441603,
+          "lng": -119.823092,
+          "mapUrl": "https://www.google.com/maps/search/?api=1&query=Panino+5666+Calle+Real%2C+Goleta%2C+CA+93117",
+          "appleMapsUrl": "https://maps.apple/p/K9W-Kf6xt6hnj_"
+        }
+      ],
+      "participation": {
+        "sbsandwichweek": 2025
+      }
+    },
+    "pascucci": {
+      "name": "Pascucci",
+      "aka": [],
+      "website": "https://www.pascuccirestaurant-sb.com",
+      "phone": "805-963-8123",
+      "instagram": "pascuccirestaurantsb",
+      "locations": [
+        {
+          "label": null,
+          "address": "1230-A State St., Santa Barbara, CA",
+          "area": "Downtown",
+          "lat": 34.424304,
+          "lng": -119.705252,
+          "mapUrl": "https://maps.app.goo.gl/Np3d4iumbLR7txnS9",
+          "appleMapsUrl": "https://maps.apple/p/.acg2UBX9RIsmD"
+        }
+      ],
+      "participation": {
+        "sbburgerweek": 2026
+      }
+    },
+    "poke-house": {
+      "name": "Poke House",
+      "aka": [],
+      "website": "https://www.poke.house",
+      "phone": "805-869-2722",
+      "instagram": "poke.house",
+      "locations": [
+        {
+          "label": null,
+          "address": "811 State St, Ste D, Santa Barbara, CA 93101",
+          "area": "Downtown",
+          "lat": 34.419647,
+          "lng": -119.700116,
+          "mapUrl": "https://maps.app.goo.gl/yELnA6Nf6gKkUnq28",
+          "appleMapsUrl": "https://maps.apple/p/7E1x9a1xwzimRh"
+        }
+      ],
+      "participation": {
+        "sbburgerweek": 2026,
+        "sbsandwichweek": 2025
+      }
+    },
+    "que-by-whiskey-n-rye": {
+      "name": "'Que by Whiskey 'N Rye",
+      "aka": [],
+      "website": "https://www.quesmokeshack.com",
+      "phone": "805-869-2193",
+      "instagram": "quesmokeshack",
+      "locations": [
+        {
+          "label": null,
+          "address": "38 W Victoria St, Ste 108, Santa Barbara, CA 93101",
+          "area": "Downtown",
+          "lat": 34.423601,
+          "lng": -119.707027,
+          "mapUrl": "https://www.google.com/maps/search/?api=1&query=%27Que+by+Whiskey+%27N+Rye+38+W+Victoria+St%2C+Ste+108%2C+Santa+Barbara%2C+CA+93101",
+          "appleMapsUrl": "https://maps.apple/p/tngxQEruUBGjvC"
+        }
+      ],
+      "participation": {
+        "sbsandwichweek": 2026
+      }
+    },
+    "que-smoke-shack": {
+      "name": "Que Smoke Shack",
+      "aka": [],
+      "website": "https://www.quesmokeshack.com",
+      "phone": "805-869-2193",
+      "instagram": "quesmokeshack",
+      "locations": [
+        {
+          "label": null,
+          "address": "38 W. Victoria St., Santa Barbara, CA",
+          "area": "Downtown",
+          "lat": 34.423601,
+          "lng": -119.707027,
+          "mapUrl": "https://maps.app.goo.gl/JjMZXMkxcnsDEBLm7",
+          "appleMapsUrl": "https://maps.apple/p/ocM85RZ2z3h26k"
+        }
+      ],
+      "participation": {
+        "sbburgerweek": 2026
+      }
+    },
+    "renaud-s-patisserie": {
+      "name": "Renaud's Patisserie",
+      "aka": [],
+      "website": "https://www.renaudspatisserie.com",
+      "phone": "805-569-2400",
+      "instagram": "renaudspatisserie",
+      "locations": [
+        {
+          "label": "3315 State",
+          "address": "3315 State St, Santa Barbara, CA",
+          "area": "Upper State",
+          "lat": 34.4393,
+          "lng": -119.7358,
+          "mapUrl": "https://www.google.com/maps/search/?api=1&query=Renauds+Patisserie+3315+State+St+Santa+Barbara+CA",
+          "appleMapsUrl": "https://maps.apple/p/LZaE2d8~ByEzDv"
+        },
+        {
+          "label": "1324 State",
+          "address": "1324 State St, Santa Barbara, CA",
+          "area": "Downtown",
+          "lat": 34.426,
+          "lng": -119.7063,
+          "mapUrl": "https://www.google.com/maps/search/?api=1&query=Renauds+Patisserie+1324+State+St+Santa+Barbara+CA",
+          "appleMapsUrl": "https://maps.apple/p/LHSXr2vzGi2cQC"
+        },
+        {
+          "label": "Coast Village",
+          "address": "1187 Coast Village Rd, Montecito, CA",
+          "area": "Montecito",
+          "lat": 34.42081,
+          "lng": -119.645,
+          "mapUrl": "https://www.google.com/maps/search/?api=1&query=Renauds+Patisserie+1187+Coast+Village+Rd+Montecito+CA",
+          "appleMapsUrl": "https://maps.apple/p/fBFnpNe7BzksuE"
+        },
+        {
+          "label": "Gelson's",
+          "address": "3305 State St, Santa Barbara, CA",
+          "area": "Upper State",
+          "lat": 34.439303,
+          "lng": -119.735898,
+          "mapUrl": "https://www.google.com/maps/search/?api=1&query=Renauds+Patisserie+Gelsons+3305+State+St+Santa+Barbara+CA",
+          "appleMapsUrl": "https://maps.apple/p/LZaE2d8~ByEzDv"
+        }
+      ],
+      "participation": {
+        "sbcoffeeweek": 2026
+      }
+    },
+    "rinkside-cafe": {
+      "name": "Rinkside Cafe",
+      "aka": [],
+      "website": "https://www.iceinparadise.org/rinkside-cafe",
+      "phone": "805-335-4521",
+      "instagram": "rinksidecafe",
+      "locations": [
+        {
+          "label": null,
+          "address": "6985 Santa Felicia Dr, Goleta, CA 93117",
+          "area": "Goleta",
+          "lat": 34.425835,
+          "lng": -119.871156,
+          "mapUrl": "https://maps.app.goo.gl/9aS1C1VuTfqo6L4T8",
+          "appleMapsUrl": "https://maps.apple/p/R-0PLb8ybsZvb2"
+        }
+      ],
+      "participation": {
+        "sbburgerweek": 2026,
+        "sbsandwichweek": 2025
+      }
+    },
+    "sama-sama-kitchen": {
+      "name": "Sama Sama Kitchen",
+      "aka": [],
+      "website": "https://www.samasamakitchen.com",
+      "phone": "805-845-4472",
+      "instagram": "samasamakitchen",
+      "locations": [
+        {
+          "label": null,
+          "address": "1208 State St, Santa Barbara, CA",
+          "area": "Downtown",
+          "lat": 34.4252,
+          "lng": -119.7056,
+          "mapUrl": "https://www.google.com/maps/search/?api=1&query=Sama+Sama+Kitchen+1208+State+St+Santa+Barbara+CA",
+          "appleMapsUrl": "https://maps.apple/p/tegWjmFQI6WW~Y"
+        }
+      ],
+      "participation": {
+        "sbcoffeeweek": 2026
+      }
+    },
+    "sama-san-roque": {
+      "name": "Sama San Roque",
+      "aka": [],
+      "website": "https://www.samasanroque.com",
+      "phone": "805-450-8288",
+      "instagram": "samasanroque",
+      "locations": [
+        {
+          "label": null,
+          "address": "3435 State St., Santa Barbara, CA",
+          "area": "Upper State",
+          "lat": 34.439916,
+          "lng": -119.738005,
+          "mapUrl": "https://maps.app.goo.gl/iNqeXdJEw6Q9Mucd6",
+          "appleMapsUrl": "https://maps.apple/p/oBfTD-.Q6N0Av_"
+        }
+      ],
+      "participation": {
+        "sbburgerweek": 2026
+      }
+    },
+    "santa-barbara-fish-market": {
+      "name": "Santa Barbara Fish Market",
+      "aka": [],
+      "website": "https://www.sbfish.com",
+      "phone": "805-965-9564",
+      "instagram": "sbfishmarket",
+      "locations": [
+        {
+          "label": null,
+          "address": "7127 Hollister Ave, Ste 18, Goleta, CA 93117",
+          "area": "Goleta",
+          "lat": 34.428633,
+          "lng": -119.876655,
+          "mapUrl": "https://maps.app.goo.gl/fATpYsiitbhoVSRm7",
+          "appleMapsUrl": "https://maps.apple/p/MFjhN9uKSytnZH"
+        }
+      ],
+      "participation": {
+        "sbburgerweek": 2026,
+        "sbsandwichweek": 2025
+      }
+    },
+    "santa-barbara-pizza-house": {
+      "name": "Santa Barbara Pizza House",
+      "aka": [],
+      "website": "https://www.sbpizzahouse.com",
+      "phone": "805-637-7721",
+      "instagram": null,
+      "locations": [
+        {
+          "label": null,
+          "address": "515 State St, Santa Barbara, CA 93101",
+          "area": "Downtown",
+          "lat": 34.416992,
+          "lng": -119.696321,
+          "mapUrl": "https://www.google.com/maps/search/?api=1&query=Santa+Barbara+Pizza+House+515+State+St%2C+Santa+Barbara%2C+CA+93101",
+          "appleMapsUrl": "https://maps.apple/p/DWAF591VfPfy-S"
+        }
+      ],
+      "participation": {
+        "sbsandwichweek": 2026
+      }
+    },
+    "santa-barbara-roasting-company": {
+      "name": "Santa Barbara Roasting Company",
+      "aka": [],
+      "website": "https://www.sbcoffee.com",
+      "phone": "805-962-0320",
+      "instagram": "sbroastingco",
+      "locations": [
+        {
+          "label": null,
+          "address": "321 Motor Way, Santa Barbara, CA",
+          "area": "Eastside",
+          "lat": 34.4156,
+          "lng": -119.687,
+          "mapUrl": "https://www.google.com/maps/search/?api=1&query=Santa+Barbara+Roasting+Company+321+Motor+Way+Santa+Barbara+CA",
+          "appleMapsUrl": "https://maps.apple/p/eX4m6Sd3jR1ZZx"
+        }
+      ],
+      "participation": {
+        "sbcoffeeweek": 2026
+      }
+    },
+    "sb-biergarten": {
+      "name": "SB Biergarten",
+      "aka": [],
+      "website": "https://www.beersantabarbara.com",
+      "phone": "805-856-6694",
+      "instagram": "sbbiergarten",
+      "locations": [
+        {
+          "label": null,
+          "address": "11 Anacapa St., Santa Barbara, CA",
+          "area": "Funk Zone",
+          "lat": 34.413321,
+          "lng": -119.688943,
+          "mapUrl": "https://maps.app.goo.gl/sSgP1bi7teQWbd2p9",
+          "appleMapsUrl": "https://maps.apple/p/dUKud0Wn3XcgJw"
+        }
+      ],
+      "participation": {
+        "sbburgerweek": 2026
+      }
+    },
+    "seoulmate-kitchen": {
+      "name": "Seoulmate Kitchen",
+      "aka": [],
+      "website": "https://www.seoulmatekitchen.com",
+      "phone": "805-869-2566",
+      "instagram": "seoulmate_kitchen",
+      "locations": [
+        {
+          "label": null,
+          "address": "38 W. Victoria St. Ste. 115, Santa Barbara, CA",
+          "area": "Downtown",
+          "lat": 34.423601,
+          "lng": -119.707027,
+          "mapUrl": "https://maps.app.goo.gl/xzV7swXZ83gfgELA6",
+          "appleMapsUrl": "https://maps.apple/p/IAXTbR~k-gkNIa"
+        }
+      ],
+      "participation": {
+        "sbburgerweek": 2026
+      }
+    },
+    "shalhoob-s": {
+      "name": "Shalhoob's",
+      "aka": [],
+      "website": "https://shalhoob.com",
+      "phone": "805-256-7353",
+      "instagram": "shalhoobmeatco",
+      "locations": [
+        {
+          "label": "Goleta",
+          "address": "5112 Hollister Ave, Goleta, CA 93117",
+          "area": "Goleta",
+          "lat": 34.435304,
+          "lng": -119.802869,
+          "mapUrl": "https://maps.app.goo.gl/35q8XFMUXjyyAk8b6",
+          "appleMapsUrl": "https://maps.apple/p/0b-Z3yLt-pt29a"
+        },
+        {
+          "label": "Funk Zone",
+          "address": "220 Gray Ave, Santa Barbara, CA 93101",
+          "area": "Funk Zone",
+          "lat": 34.416328,
+          "lng": -119.690533,
+          "mapUrl": "https://www.google.com/maps/search/?api=1&query=Shalhoob's+220+Gray+Ave%2C+Santa+Barbara%2C+CA+93101",
+          "appleMapsUrl": "https://maps.apple/p/xXrzwk9r72q~I-"
+        }
+      ],
+      "participation": {
+        "sbburgerweek": 2026,
+        "sbsandwichweek": 2026
+      }
+    },
+    "shalhoob-s-funk-zone-patio": {
+      "name": "Shalhoob's Funk Zone Patio",
+      "aka": [],
+      "website": "https://www.shalhoob.com",
+      "phone": "805-963-7733",
+      "instagram": "shalhoobmeatco",
+      "locations": [
+        {
+          "label": null,
+          "address": "220 Gray Ave., Santa Barbara, CA",
+          "area": "Funk Zone",
+          "lat": 34.416328,
+          "lng": -119.690533,
+          "mapUrl": "https://maps.app.goo.gl/V86GgAv3aB1vH7As8",
+          "appleMapsUrl": "https://maps.apple/p/y~H7PBSHU37cZZ"
+        }
+      ],
+      "participation": {
+        "sbburgerweek": 2026
+      }
+    },
+    "south-coast-deli": {
+      "name": "South Coast Deli",
+      "aka": [],
+      "website": "https://southcoastdeli.com/",
+      "phone": "805-845-4600",
+      "instagram": null,
+      "locations": [
+        {
+          "label": "Carrillo",
+          "address": "10 E Carrillo St, Santa Barbara, CA 93101",
+          "area": "Downtown",
+          "lat": 34.421728,
+          "lng": -119.701382,
+          "mapUrl": "https://www.google.com/maps/search/?api=1&query=South+Coast+Deli+10+E+Carrillo+St%2C+Santa+Barbara%2C+CA+93101",
+          "appleMapsUrl": "https://maps.apple/p/VqaiokaG1RZa4~"
+        },
+        {
+          "label": "Patterson",
+          "address": "185 S Patterson Ave, Santa Barbara, CA 93111",
+          "area": "Goleta",
+          "lat": 34.435606,
+          "lng": -119.809751,
+          "mapUrl": "https://www.google.com/maps/search/?api=1&query=South+Coast+Deli+185+S+Patterson+Ave%2C+Santa+Barbara%2C+CA+93111",
+          "appleMapsUrl": "https://maps.apple/p/u55tqK1AWyIArp"
+        },
+        {
+          "label": "State St",
+          "address": "3534 State St, Santa Barbara, CA 93105",
+          "area": "Upper State",
+          "lat": 34.440637,
+          "lng": -119.73968,
+          "mapUrl": "https://www.google.com/maps/search/?api=1&query=South+Coast+Deli+3534+State+St%2C+Santa+Barbara%2C+CA+93105",
+          "appleMapsUrl": "https://maps.apple/p/Jp_1..Ri6xGxfI"
+        },
+        {
+          "label": "Santa Barbara St",
+          "address": "205 Santa Barbara St, Santa Barbara, CA 93101",
+          "area": "Eastside",
+          "lat": 34.416097,
+          "lng": -119.689893,
+          "mapUrl": "https://www.google.com/maps/search/?api=1&query=South+Coast+Deli+205+Santa+Barbara+St%2C+Santa+Barbara%2C+CA+93101",
+          "appleMapsUrl": "https://maps.apple/p/jBBUKwWAdnsmvD"
+        }
+      ],
+      "participation": {
+        "sbsandwichweek": 2025
+      }
+    },
+    "the-blue-owl": {
+      "name": "The Blue Owl",
+      "aka": [],
+      "website": "https://theblueowlsb.com/",
+      "phone": "805-705-0991",
+      "instagram": "blueowlsb",
+      "locations": [
+        {
+          "label": null,
+          "address": "5 W Canon Perdido St, Santa Barbara, CA 93101",
+          "area": "Downtown",
+          "lat": 34.420052,
+          "lng": -119.7009,
+          "mapUrl": "https://maps.app.goo.gl/1h1oVTPVCz5xG1tg9",
+          "appleMapsUrl": "https://maps.apple/p/m7Vu1PFX.BrNBX"
+        }
+      ],
+      "participation": {
+        "sbburgerweek": 2026,
+        "sbsandwichweek": 2026
+      }
+    },
+    "the-brewhouse": {
+      "name": "The Brewhouse",
+      "aka": [],
+      "website": "https://www.sbbrewhouse.com",
+      "phone": "805-884-4664",
+      "instagram": "sbbrewhouse",
+      "locations": [
+        {
+          "label": null,
+          "address": "229 W Montecito St., Santa Barbara, CA",
+          "area": "Funk Zone",
+          "lat": 34.411938,
+          "lng": -119.695913,
+          "mapUrl": "https://maps.app.goo.gl/u86a8XNtQ9gM7DfW6",
+          "appleMapsUrl": "https://maps.apple/p/Ua9iRD~BAuQ5s.z"
+        }
+      ],
+      "participation": {
+        "sbburgerweek": 2026
+      }
+    },
+    "the-natural-cafe": {
+      "name": "The Natural Cafe",
+      "aka": [],
+      "website": "https://thenaturalcafe.com/",
+      "phone": "805-563-1163",
+      "instagram": null,
+      "locations": [
+        {
+          "label": "Hitchcock",
+          "address": "361 Hitchcock Way, Santa Barbara, CA 93105",
+          "area": "Upper State",
+          "lat": 34.434947,
+          "lng": -119.745965,
+          "mapUrl": "https://www.google.com/maps/search/?api=1&query=The+Natural+Cafe+361+Hitchcock+Way%2C+Santa+Barbara%2C+CA+93105",
+          "appleMapsUrl": "https://maps.apple/p/HTIJBf3AhaXsRj"
+        },
+        {
+          "label": "Goleta",
+          "address": "6990 Marketplace Dr, Goleta, CA 93117",
+          "area": "Goleta",
+          "lat": 34.429465,
+          "lng": -119.87129,
+          "mapUrl": "https://www.google.com/maps/search/?api=1&query=The+Natural+Cafe+6990+Marketplace+Dr%2C+Goleta%2C+CA+93117",
+          "appleMapsUrl": "https://maps.apple/p/ziZArrr7M8KJbq"
+        }
+      ],
+      "participation": {
+        "sbsandwichweek": 2026
+      }
+    },
+    "the-nugget": {
+      "name": "The Nugget",
+      "aka": [],
+      "website": "https://www.nuggetbarandgrill.com",
+      "phone": "+1 (805) 576-9007",
+      "instagram": "thenuggetofgoleta",
+      "locations": [
+        {
+          "label": "Goleta",
+          "address": "5687 Calle Real, Goleta, CA",
+          "area": "Goleta",
+          "lat": 34.440838,
+          "lng": -119.823059,
+          "mapUrl": "https://maps.app.goo.gl/nTom9qBWAcJ9FzKz9",
+          "appleMapsUrl": "https://maps.apple/p/g~6tyn2jtzVFQ6"
+        },
+        {
+          "label": "Summerland",
+          "address": "2318 Lillie Ave., Summerland, CA",
+          "area": "Summerland",
+          "lat": 34.421723,
+          "lng": -119.599547,
+          "mapUrl": "https://maps.app.goo.gl/Qqp5pJiaCNDZ3uRDA",
+          "appleMapsUrl": "https://maps.apple/p/HM7pAt5EhvmgQx"
+        },
+        {
+          "label": "Carpinteria",
+          "address": "892 Linden Ave., Carpinteria, CA",
+          "area": "Carpinteria",
+          "lat": 34.398042,
+          "lng": -119.51916,
+          "mapUrl": "https://maps.app.goo.gl/xwmjKDJvPnS1oe4w7",
+          "appleMapsUrl": "https://maps.apple/p/ZP.ggEK10P5_Go"
+        }
+      ],
+      "participation": {
+        "sbburgerweek": 2026
+      }
+    },
+    "the-patio-cafe": {
+      "name": "The Patio Cafe",
+      "aka": [],
+      "website": "https://www.thepatiocafesb.com/",
+      "phone": "805-687-3663",
+      "instagram": "the.patiocafesb",
+      "locations": [
+        {
+          "label": null,
+          "address": "3007 De La Vina St, Santa Barbara, CA 93105",
+          "area": "Upper State",
+          "lat": 34.438691,
+          "lng": -119.728472,
+          "mapUrl": "https://maps.app.goo.gl/raNcJPmmkn5mMp4x9",
+          "appleMapsUrl": "https://maps.apple/p/u90nqscWyxCNj4"
+        }
+      ],
+      "participation": {
+        "sbburgerweek": 2026,
+        "sbsandwichweek": 2026
+      }
+    },
+    "the-victor": {
+      "name": "The Victor",
+      "aka": [],
+      "website": "https://www.thevictor.us",
+      "phone": "+1 (805) 695-2999",
+      "instagram": "thevictor_sy",
+      "locations": [
+        {
+          "label": null,
+          "address": "3631 Sagunto St., Santa Ynez, CA",
+          "area": "Santa Ynez Valley",
+          "lat": 34.613083,
+          "lng": -120.078474,
+          "mapUrl": "https://maps.app.goo.gl/tQ9GFna3qRasLufZ7",
+          "appleMapsUrl": "https://maps.apple/p/NvE-BeGF4haMtX"
+        }
+      ],
+      "participation": {
+        "sbburgerweek": 2026
+      }
+    },
+    "the-win-dow": {
+      "name": "The Win-dow",
+      "aka": [],
+      "website": "https://www.thewin-dow.la/santa-barbara",
+      "phone": "805-880-2775",
+      "instagram": "thewindow.la",
+      "locations": [
+        {
+          "label": null,
+          "address": "701 Chapala St., Santa Barbara, CA",
+          "area": "Downtown",
+          "lat": 34.417568,
+          "lng": -119.699434,
+          "mapUrl": "https://maps.app.goo.gl/umr83npQPfSKA8AM8",
+          "appleMapsUrl": "https://maps.apple/p/pDBVZsfDszCyIQ"
+        }
+      ],
+      "participation": {
+        "sbburgerweek": 2026
+      }
+    },
+    "third-window-brewing": {
+      "name": "Third Window Brewing",
+      "aka": [],
+      "website": "https://www.thirdwindowbrewing.com",
+      "phone": "+1 (805) 562-6475",
+      "instagram": "thirdwindowbrewing",
+      "locations": [
+        {
+          "label": "Santa Barbara",
+          "address": "406 E Haley St Ste 3, Santa Barbara, CA",
+          "area": "Eastside",
+          "lat": 34.420992,
+          "lng": -119.690444,
+          "mapUrl": "https://maps.app.goo.gl/CxyGVg16v1dAXkVq6",
+          "appleMapsUrl": "https://maps.apple/p/o2.x6VY5-8B~c4"
+        },
+        {
+          "label": "Carpinteria",
+          "address": "720 Linden Ave, Carpinteria, CA",
+          "area": "Carpinteria",
+          "lat": 34.39704,
+          "lng": -119.520395,
+          "mapUrl": "https://maps.app.goo.gl/gpcE5McRYoq2aY4MA",
+          "appleMapsUrl": "https://maps.apple/p/HhNum2x75sTZXQ"
+        }
+      ],
+      "participation": {
+        "sbburgerweek": 2026,
+        "sbcoffeeweek": 2026
+      }
+    },
+    "valentino-s-take-n-bake-pizza": {
+      "name": "Valentino's Take N' Bake Pizza",
+      "aka": [],
+      "website": null,
+      "phone": "805-967-7338",
+      "instagram": "valentinos_sb",
+      "locations": [
+        {
+          "label": null,
+          "address": "4421 Hollister Ave, Santa Barbara, CA 93110",
+          "area": "Noleta",
+          "lat": 34.439748,
+          "lng": -119.770609,
+          "mapUrl": "https://www.google.com/maps/search/?api=1&query=Valentino%27s+Take+N%27+Bake+Pizza+4421+Hollister+Ave%2C+Santa+Barbara%2C+CA+93110",
+          "appleMapsUrl": "https://maps.apple/p/KNEbSsp54gkWHP"
+        }
+      ],
+      "participation": {
+        "sbsandwichweek": 2025
+      }
+    },
+    "validation-ale": {
+      "name": "Validation Ale",
+      "aka": [],
+      "website": "https://www.validationale.com/",
+      "phone": "805-500-3111",
+      "instagram": "validationsb",
+      "locations": [
+        {
+          "label": "Yanonali",
+          "address": "102 E Yanonali St, Santa Barbara, CA 93101",
+          "area": "Funk Zone",
+          "lat": 34.415026,
+          "lng": -119.690101,
+          "mapUrl": "https://maps.app.goo.gl/ZeQpwXm2LdCZo4S88",
+          "appleMapsUrl": "https://maps.apple/p/GogauyHgiL2MGN"
+        },
+        {
+          "label": "De La Vina",
+          "address": "2840 De La Vina St, Santa Barbara, CA 93105",
+          "area": "Upper State",
+          "lat": 34.437506,
+          "lng": -119.726482,
+          "mapUrl": "https://www.google.com/maps/search/?api=1&query=Validation+Ale+2840+De+La+Vina+St%2C+Santa+Barbara%2C+CA+93105",
+          "appleMapsUrl": "https://maps.apple/p/B933gW.aJ3bn4r"
+        }
+      ],
+      "participation": {
+        "sbburgerweek": 2026,
+        "sbsandwichweek": 2025
+      }
+    },
+    "validation-annex": {
+      "name": "Validation Annex",
+      "aka": [],
+      "website": "https://www.validationale.com",
+      "phone": "805-500-3111",
+      "instagram": "validationsb",
+      "locations": [
+        {
+          "label": null,
+          "address": "2840 De La Vina St, Ste C, Santa Barbara, CA",
+          "area": "Upper State",
+          "lat": 34.437506,
+          "lng": -119.726482,
+          "mapUrl": "https://maps.app.goo.gl/MWDHsQcoNZZ5CJ7U9",
+          "appleMapsUrl": "https://maps.apple/p/B933gW.aJ3bn4r"
+        }
+      ],
+      "participation": {
+        "sbburgerweek": 2026
+      }
+    },
+    "white-caps-beach-club": {
+      "name": "White Caps Beach Club",
+      "aka": [],
+      "website": "https://www.whitecapsbeachclub.com",
+      "phone": "805-705-6412",
+      "instagram": "whitecapsbeachclub",
+      "locations": [
+        {
+          "label": null,
+          "address": "6775 Hollister Ave., Goleta, CA",
+          "area": "Goleta",
+          "lat": 34.429618,
+          "lng": -119.865668,
+          "mapUrl": "https://maps.app.goo.gl/nAJvesRCHdofkBez6",
+          "appleMapsUrl": "https://maps.apple/p/UB7AB5J928n9EF"
+        }
+      ],
+      "participation": {
+        "sbburgerweek": 2026
+      }
+    },
+    "yellow-belly": {
+      "name": "Yellow Belly",
+      "aka": [],
+      "website": "https://www.yellowbellytap.com/",
+      "phone": "805-770-5694",
+      "instagram": null,
+      "locations": [
+        {
+          "label": null,
+          "address": "2611 De La Vina St, Santa Barbara, CA 93105",
+          "area": "Upper State",
+          "lat": 34.434846,
+          "lng": -119.724707,
+          "mapUrl": "https://www.google.com/maps/search/?api=1&query=Yellow+Belly+2611+De+La+Vina+St%2C+Santa+Barbara%2C+CA+93105",
+          "appleMapsUrl": "https://maps.apple/p/ppGNs1dYmHyxJ2"
+        }
+      ],
+      "participation": {
+        "sbsandwichweek": 2025
+      }
+    },
+    "yellow-belly-tap": {
+      "name": "Yellow Belly Tap",
+      "aka": [],
+      "website": "https://www.yellowbellytap.com",
+      "phone": "805-770-5694",
+      "instagram": "yellowbellytap",
+      "locations": [
+        {
+          "label": null,
+          "address": "2611 De La Vina St., Santa Barbara, CA",
+          "area": "Upper State",
+          "lat": 34.434846,
+          "lng": -119.724707,
+          "mapUrl": "https://maps.app.goo.gl/vxF6Kn8zHgkJTzRZA",
+          "appleMapsUrl": "https://maps.apple/p/KaHQjm176IenYn"
+        }
+      ],
+      "participation": {
+        "sbburgerweek": 2026
+      }
+    }
+  }
+}
