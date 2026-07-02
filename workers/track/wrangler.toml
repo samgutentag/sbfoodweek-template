@@ -5,6 +5,19 @@ compatibility_date = "2024-01-01"
 [vars]
 ACCOUNT_ID = "YOUR_CLOUDFLARE_ACCOUNT_ID"
 
+# Web Analytics site tag for the RUM GraphQL queries (device/browser/OS,
+# hourly pageloads, live visitors).
+#
+# CAUTION: this is NOT the beacon token from config.js cfAnalyticsToken —
+# the GraphQL siteTag is a different identifier. Find yours by querying:
+#   { viewer { accounts(filter: {accountTag: "<ACCOUNT_ID>"}) {
+#       rumPageloadEventsAdaptiveGroups(
+#         filter: {datetime_geq: "<yesterday>", datetime_leq: "<now>"}, limit: 10
+#       ) { count dimensions { siteTag requestHost } } } } }
+# against https://api.cloudflare.com/client/v4/graphql and matching your
+# site's hostname. Using the beacon token silently returns empty RUM data.
+RUM_SITE_TAG = "YOUR_RUM_SITE_TAG"
+
 [[analytics_engine_datasets]]
 binding = "TRACKER"
 dataset = "sbfoodweek"
