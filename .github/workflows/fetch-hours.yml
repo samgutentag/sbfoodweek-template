@@ -1,14 +1,11 @@
 name: Fetch Restaurant Hours
 
+# Permanent daily cron — scripts/workflow-gate.py decides whether today is
+# inside the event window (from config.js), so starting or stopping an event
+# never edits this file. Manual dispatch always runs.
 on:
-  # Schedule disabled between events. To re-enable for the next event:
-  # 1. Uncomment the schedule block below
-  # 2. Update the cron day range to cover 2 days before → 1 day after the event
-  # 3. Commit and push
-  #
-  # schedule:
-  #   # Daily at 6am PT (13:00 UTC) — adjust date range for next event
-  #   - cron: "0 13 17-26 2 *"
+  schedule:
+    - cron: "0 13 * * *" # Daily at 6am PT (13:00 UTC)
   workflow_dispatch:
 
 permissions:
@@ -20,12 +17,23 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Check event window
+        id: gate
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            echo "active=true" >> "$GITHUB_OUTPUT"
+          else
+            python3 scripts/workflow-gate.py fetch-hours >> "$GITHUB_OUTPUT"
+          fi
+
       - name: Fetch hours from Google Places API
+        if: steps.gate.outputs.active == 'true'
         env:
           GOOGLE_PLACES_API_KEY: ${{ secrets.GOOGLE_PLACES_API_KEY }}
         run: python3 fetch-hours.py
 
       - name: Commit hours.json if changed
+        if: steps.gate.outputs.active == 'true'
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
