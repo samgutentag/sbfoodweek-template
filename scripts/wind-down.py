@@ -51,6 +51,25 @@ def main():
                 sys.exit(f"  snapshots/{f} missing or empty — aborting before disabling anything.")
         print("  hourly archives verified.\n")
 
+    print("Step 2.5 — bake tracking-snapshot.js from the newest daily snapshot")
+    print("  (Analytics Engine keeps raw rows ~90 days; without this the stats")
+    print("  Activity tab goes empty when retention expires — ask coffee week.)")
+    snaps = sorted((REPO / "snapshots").glob("tracking-2*.json"))
+    if not snaps:
+        sys.exit("  no snapshots/tracking-*.json found — run the snapshot workflow first.")
+    latest = snaps[-1]
+    if dry:
+        print(f"  [dry-run] would bake tracking-snapshot.js from {latest.name}\n")
+    else:
+        snap = json.loads(latest.read_text())
+        baked = (
+            f"// Final tracking snapshot from {snap.get('timestamp', 'unknown')}\n"
+            f"// Generated from snapshots/{latest.name} by scripts/wind-down.py\n"
+            f"var TRACKING_SNAPSHOT = {json.dumps(snap, indent=2, sort_keys=True)};\n"
+        )
+        (REPO / "tracking-snapshot.js").write_text(baked)
+        print(f"  baked tracking-snapshot.js from {latest.name}\n")
+
     print("Step 3 — flip config.js to archived")
     new_config = re.sub(r'^(\s*)archived:\s*false', r'\1archived: true', config, flags=re.M)
     new_config = re.sub(r'^(\s*cfAnalyticsToken:\s*)"[^"]*"', r'\1null', new_config, flags=re.M)
