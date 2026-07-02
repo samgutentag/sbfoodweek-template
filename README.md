@@ -20,13 +20,16 @@ A config-driven interactive map for food week events. Burger week, sandwich week
 
 ## Staying in Sync
 
-Pull future template improvements into your event repo:
+Event repos are created with "Use this template", which produces a fresh git
+history — `git merge template/main` does NOT work. Sync is file-based instead:
+template-owned files (listed in `template-manifest.json`) are copied wholesale,
+and event-owned files (`config.js`, data files, `wrangler.toml`, snapshots) are
+never touched.
 
 ```bash
-git remote add template https://github.com/samgutentag/sbfoodweek-template.git
-git fetch template
-git merge template/main
-# config.js will conflict — keep your values
+# from your event repo, with the template cloned as a sibling directory
+python3 sync-from-template.py            # copy template-owned files
+python3 sync-from-template.py --check    # just report drift (CI-friendly)
 ```
 
 ---
@@ -494,26 +497,12 @@ Go to your repo → **Settings** → **Secrets and variables** → **Actions** �
 
 #### 10b. Configure the Workflow
 
-Edit `.github/workflows/snapshot-tracking.yml`:
-
-1. **Uncomment the schedule block:**
-   ```yaml
-   schedule:
-     # Hourly during event week — adjust date range for next event
-     - cron: "0 * 5-14 3 *"   # Mar 5–14, hourly
-   ```
-
-2. **Update the SQL timestamp filters** (two places in the inline Python script):
-   ```sql
-   WHERE timestamp >= toDateTime('2026-03-05 09:00:00')
-   ```
-
-3. **Update the dataset name** in the SQL queries if you changed it:
-   ```sql
-   FROM sbburritoweek
-   ```
-
-4. Commit and push. The workflow also supports **manual dispatch** from the Actions tab.
+Nothing to configure. The workflow runs daily year-round and
+`scripts/workflow-gate.py` activates it only inside the event window it reads
+from `config.js` (a week before `dataLiveDate` through 5 days after
+`eventEndDate`). The dataset name comes from `DATASET_NAME` in
+`workers/track/wrangler.toml`. Manual dispatch from the **Actions** tab always
+runs regardless of the window.
 
 Snapshots are saved to `snapshots/tracking-YYYY-MM-DD.json`.
 
@@ -572,18 +561,13 @@ GOOGLE_PLACES_API_KEY=your_key python3 fetch-hours.py
 
 Verify `hours.json` looks correct, then commit it.
 
-#### 11f. Enable the Daily Workflow
+#### 11f. The Daily Workflow
 
-Edit `.github/workflows/fetch-hours.yml`:
-
-1. **Uncomment the schedule block:**
-   ```yaml
-   schedule:
-     # Daily at 6am PT (13:00 UTC) — adjust date range for next event
-     - cron: "0 13 3-14 3 *"   # Mar 3–14 (2 days before through 3 days after)
-   ```
-
-2. Commit and push. The workflow runs daily, fetches fresh hours, and auto-commits `hours.json` if anything changed.
+Already enabled. Like the snapshot workflow, `fetch-hours.yml` runs daily and
+gates itself on the event window from `config.js` (3 days before
+`dataLiveDate` through 1 day after `eventEndDate`), so hours stay fresh during
+the event and the Google Places API is never called off-season. Manual
+dispatch always runs.
 
 **Graceful degradation:** If `hours.json` is missing or fails to load, the hours features simply don't appear. Everything else works normally.
 
@@ -632,30 +616,48 @@ The QR code in the HTML also uses a dynamically generated one from `api.qrserver
 
 ### Activating for Your Event
 
-1. Finalize `config.js` (all fields, especially `trackUrl`, `cfAnalyticsToken`, `dataLiveDate`)
-2. Run `python3 apply-theme.py`
-3. Populate `data-YYYY.js` with full restaurant data and menu items
-4. Uncomment cron schedules in `.github/workflows/fetch-hours.yml` and `snapshot-tracking.yml`
-5. Enable Worker writes in `workers/track/index.js` (remove early return, uncomment `writeDataPoint`)
-6. Deploy Worker: `cd workers/track && wrangler deploy`
-7. Commit and push everything
-8. Verify: site loads, `/stats` shows data, tracking events appear in `wrangler tail`
+1. Finalize `config.js` (all fields — especially the event dates, `timeZone`,
+   `trackUrl`, `cfAnalyticsToken`, `dataLiveDate`) and set `DATASET_NAME` in
+   `workers/track/wrangler.toml`
+2. Populate `data-YYYY.js` with full restaurant data and menu items
+   (`scripts/registry.py pull` prefills known venues from the shared registry)
+3. Run `python3 scripts/start-event.py` — validates config + data contract,
+   runs `apply-theme.py`, and prints whatever manual steps remain
+4. Deploy Worker: `cd workers/track && wrangler deploy`
+5. Commit and push everything
+6. Verify: site loads, `/stats` shows data, tracking events appear in `wrangler tail`
+
+The scheduled workflows need no editing: they run daily year-round and
+`scripts/workflow-gate.py` activates them only inside the event window read
+from `config.js`.
 
 ### Winding Down After Your Event
 
-1. Run a final snapshot: go to **Actions** tab → **Snapshot Tracking Data** → **Run workflow**
-2. Snapshot hourly data for the stats dashboard charts (do this **before** disabling `trackUrl`):
-   ```bash
-   ./snapshot-hourly.sh
-   git add snapshots/hourly-events.json snapshots/hourly-labels.json
-   ```
-   This fetches hourly action data and per-filter-label data from the Worker, scoped to your event dates from `config.js`. The stats page loads these files automatically when the event is concluded — no more Worker calls needed for charts.
-3. Set `trackUrl: null` and `cfAnalyticsToken: null` in `config.js`
-4. Run `python3 apply-theme.py`
-5. Comment out cron schedules in both workflow files
-6. Add early return + comment out `writeDataPoint` in `workers/track/index.js`
-7. Deploy Worker: `cd workers/track && wrangler deploy`
-8. Commit and push
+Run `python3 scripts/wind-down.py` — it enforces the one ordering that
+matters (archive hourly data **before** disabling anything) and walks the
+rest. What it does, in order:
+
+1. Reminds you to run a final snapshot (**Actions** → **Snapshot Tracking Data** → **Run workflow**)
+2. Runs `snapshot-hourly.py` and verifies `snapshots/hourly-events.json` +
+   `hourly-labels.json` exist — the stats charts read these forever after
+3. Sets `cfAnalyticsToken: null` and `archived: true` in `config.js`
+   (`trackUrl` may stay set: it only tells the stats/admin pages where to
+   read historical data; `archived` is what flips the site to off-season)
+4. Runs `python3 apply-theme.py`
+5. Offers `scripts/registry.py writeback` to feed this event's venue data
+   into the shared registry
+
+Worker writes stop on their own 6 days after `EVENT_END` (set in
+`wrangler.toml` by `apply-theme.py`) — no code edits, no redeploy. The
+workflows deactivate the same way via the config-driven gate.
+
+See `docs/wind-down-runbook.md` for the full API-call audit of what
+"safely dark" means.
+
+Not automated (decide per event): revoking `GOOGLE_PLACES_API_KEY` /
+`CF_ACCOUNT_ID` / `CF_API_TOKEN` repo secrets, deleting the deployed
+Worker, or deleting the Analytics Engine dataset. Quiesced costs ~nothing;
+delete only when you're sure you're done with the data.
 
 ---
 

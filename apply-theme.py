@@ -605,83 +605,20 @@ def update_readme(cfg):
 
 
 # ---------------------------------------------------------------------------
-# JS files — setView, eventStartDate
+# Worker vars — event window into wrangler.toml
 # ---------------------------------------------------------------------------
 
-def update_app_js(cfg):
-    path = os.path.join(SCRIPT_DIR, "app.js")
-    with open(path, encoding="utf-8") as f:
-        js = f.read()
-
-    center = cfg["mapCenter"]
-    zoom = cfg["mapZoom"]
-    if center and zoom:
-        js = re.sub(
-            r"\.setView\(THEME\.mapCenter, THEME\.mapZoom\)",
-            f".setView(THEME.mapCenter, THEME.mapZoom)",
-            js,
-        )
-
-    with open(path, "w", encoding="utf-8") as f:
-        f.write(js)
-
-
-def update_embed_js(cfg):
-    path = os.path.join(SCRIPT_DIR, "embed", "map", "embed.js")
-    with open(path, encoding="utf-8") as f:
-        js = f.read()
-
-    center = cfg["mapCenter"]
-    zoom = cfg["mapZoom"]
-    if center and zoom:
-        js = re.sub(
-            r"\.setView\(THEME\.mapCenter, THEME\.mapZoom\)",
-            f".setView(THEME.mapCenter, THEME.mapZoom)",
-            js,
-        )
-
-    with open(path, "w", encoding="utf-8") as f:
-        f.write(js)
-
-
-def update_stats_js_files(cfg):
-    """Update hardcoded eventStartDate in stats JS files that don't have
-    runtime access to THEME (already updated to read from THEME, so this
-    is a no-op — kept for completeness if they ever diverge)."""
-    pass
-
-
-def update_worker_js(cfg):
-    """Replace hardcoded event start date in Worker SQL queries."""
-    path = os.path.join(SCRIPT_DIR, "workers", "track", "index.js")
+def update_wrangler_toml(cfg):
+    """Write the event window into the Worker vars. POST writes self-disable
+    after EVENT_END + grace, so wind-down never edits worker code. DATASET_NAME
+    is per-event and deliberately not touched here."""
+    path = os.path.join(SCRIPT_DIR, "workers", "track", "wrangler.toml")
     with open(path, encoding="utf-8") as f:
         text = f.read()
 
-    start = cfg["eventStartDate"]
-    if start:
-        text = re.sub(
-            r"toDateTime\('[0-9-]+ [0-9:]+'\)",
-            f"toDateTime('{start} 09:00:00')",
-            text,
-        )
-
-    with open(path, "w", encoding="utf-8") as f:
-        f.write(text)
-
-
-def update_snapshot_workflow(cfg):
-    """Replace hardcoded event start date in snapshot workflow SQL queries."""
-    path = os.path.join(SCRIPT_DIR, ".github", "workflows", "snapshot-tracking.yml")
-    with open(path, encoding="utf-8") as f:
-        text = f.read()
-
-    start = cfg["eventStartDate"]
-    if start:
-        text = re.sub(
-            r"toDateTime\('[0-9-]+ [0-9:]+'\)",
-            f"toDateTime('{start} 09:00:00')",
-            text,
-        )
+    for var, key in (("EVENT_START", "eventStartDate"), ("EVENT_END", "eventEndDate")):
+        val = cfg[key] or ""
+        text = re.sub(rf'^{var}\s*=\s*"[^"]*"', f'{var} = "{val}"', text, flags=re.M)
 
     with open(path, "w", encoding="utf-8") as f:
         f.write(text)
@@ -821,12 +758,8 @@ def main():
     update_stats_html(cfg)
     print("done")
 
-    print("Updating workers/track/index.js...", end=" ", flush=True)
-    update_worker_js(cfg)
-    print("done")
-
-    print("Updating snapshot-tracking.yml...", end=" ", flush=True)
-    update_snapshot_workflow(cfg)
+    print("Updating workers/track/wrangler.toml...", end=" ", flush=True)
+    update_wrangler_toml(cfg)
     print("done")
 
 
