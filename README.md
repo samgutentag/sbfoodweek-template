@@ -18,6 +18,13 @@ A config-driven interactive map for food week events. Burger week, sandwich week
 4. Run `python3 apply-theme.py`
 5. Enable GitHub Pages → deploy from main branch
 
+## The User Guide
+
+**[docs/user-guide.html](docs/user-guide.html)** is the read-cold operator guide:
+the event lifecycle, the scripted start/wind-down transitions, every visitor-facing
+screen, how tracking and sync work, and the restaurant registry. Start there;
+this README is the step-by-step reference behind it.
+
 ## Staying in Sync
 
 Event repos are created with "Use this template", which produces a fresh git
