@@ -395,11 +395,25 @@
   }
 
   // ── Live activity section ──────────────
+  var liveActivityTimer;
   function updateLiveActivity() {
     if (!THEME.trackUrl) return;
+    // Re-check state on every tick: the load-time gate below never re-runs
+    // for a cached tab, so the loop itself must notice the event ending.
+    var state = getEventState();
+    if (state !== "pre-event" && state !== "during") {
+      clearInterval(liveActivityTimer);
+      return;
+    }
+    if (document.visibilityState === "hidden") return;
     fetch(THEME.trackUrl + "?active=true", { method: "GET" })
       .then(function (resp) { return resp.json(); })
       .then(function (data) {
+        // Worker-side stop signal after wind-down (see workers/track).
+        if (data && data.disabled) {
+          clearInterval(liveActivityTimer);
+          return;
+        }
         var section = document.getElementById("liveSection");
         if (!section || !data) return;
 
@@ -416,7 +430,7 @@
   // Live activity polling — only while the event is live (pre-event / during)
   if (__statsEventState === "pre-event" || __statsEventState === "during") {
     updateLiveActivity();
-    setInterval(updateLiveActivity, 30000);
+    liveActivityTimer = setInterval(updateLiveActivity, 30000);
   }
 
   // ── Hourly chart modal ──────────────────

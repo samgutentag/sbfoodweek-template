@@ -13,9 +13,30 @@ export default {
       return new Response(null, { headers: corsHeaders });
     }
 
+    // Live window — event end + 5-day like-grace + 24h timezone cushion.
+    // Shared by the POST write gate and the live-only GET endpoints below.
+    // No EVENT_END = window stays open (dev).
+    let liveWindowClosed = false;
+    if (env.EVENT_END) {
+      const cutoff = Date.parse(env.EVENT_END + "T23:59:59Z") + 6 * 24 * 60 * 60 * 1000;
+      liveWindowClosed = !Number.isNaN(cutoff) && Date.now() > cutoff;
+    }
+
     // GET — return aggregated counts
     if (request.method === "GET") {
       const url = new URL(request.url);
+
+      // Live-only endpoints go dark once the window closes: `disabled` tells
+      // stale cached clients to clear their polling timers. Historical reads
+      // (upvotes, hourly, detail, rum) stay up for the archived stats page.
+      if (
+        liveWindowClosed &&
+        (url.searchParams.get("active") === "true" || url.searchParams.get("eyes") === "true")
+      ) {
+        return new Response(JSON.stringify({ disabled: true }), {
+          headers: { ...corsHeaders, "Content-Type": "application/json", "Cache-Control": "public, max-age=86400" },
+        });
+      }
 
       // Active users — recent actions (5 min) + RUM visitors (1 hour)
       if (url.searchParams.get("active") === "true") {
@@ -459,15 +480,11 @@ export default {
       return new Response("Method not allowed", { status: 405 });
     }
 
-    // Writes self-disable after the event ends plus the 5-day like-grace
-    // window (plus a 24h cushion for the event-local timezone). Wind-down
-    // never needs to edit or redeploy this code — only EVENT_END in
-    // wrangler.toml controls it. No EVENT_END = writes stay open (dev).
-    if (env.EVENT_END) {
-      const cutoff = Date.parse(env.EVENT_END + "T23:59:59Z") + 6 * 24 * 60 * 60 * 1000;
-      if (!Number.isNaN(cutoff) && Date.now() > cutoff) {
-        return new Response("ok", { headers: corsHeaders });
-      }
+    // Writes self-disable once the live window closes. Wind-down never needs
+    // to edit or redeploy this code — only EVENT_END in wrangler.toml
+    // controls it.
+    if (liveWindowClosed) {
+      return new Response("ok", { headers: corsHeaders });
     }
 
     try {

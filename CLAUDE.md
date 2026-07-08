@@ -38,7 +38,12 @@ pre-launch skeleton (empty `menuItems`).
   event window via `scripts/workflow-gate.py` — never edit their crons.
 - **Stop**: `python3 scripts/wind-down.py` (archives hourly data FIRST, then
   flips `archived: true`). Worker writes self-disable 6 days after
-  `EVENT_END` (wrangler var, written by `apply-theme.py`).
+  `EVENT_END` (wrangler var, written by `apply-theme.py`); past the same
+  cutoff its live-only GETs answer `{ disabled: true }`, and the client
+  polling loops re-check the event dates every tick so tabs cached during
+  the event stop themselves. After the safely-dark verify, delete the
+  Worker (`npx wrangler delete` in `workers/track/`) — snapshots serve
+  everything archived.
 - `getEventState()` phases are anchored to `THEME.timeZone`, not the
   viewer's clock. `archived`, not `trackUrl`, is what means "off-season".
 

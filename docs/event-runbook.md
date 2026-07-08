@@ -14,7 +14,7 @@ Linear issues with due dates — this doc is the source of truth it reads.
 | S−1d | **Menus final** | Full `menuItems` in `data-<year>.js`, re-run `start-event.py --validate-only`, spot-check map + stats |
 | S+3d | **Mid-event check** | Stats sane, snapshot cron committing daily, worker writes flowing, no console errors on the live site |
 | E+1d | **Wrap messaging** | Post-event modal live (automatic), watch post-event traffic, note anything broken for the template |
-| E+6d | **Wind-down** | Like-grace window closed; `python3 scripts/wind-down.py` (archives hourly, bakes tracking-snapshot.js, sets `archived: true`), `registry.py writeback`, `sync-from-template.py --check` → 0, push |
+| E+6d | **Wind-down** | Like-grace window closed; `python3 scripts/wind-down.py` (archives hourly, bakes tracking-snapshot.js, sets `archived: true`), `registry.py writeback`, `sync-from-template.py --check` → 0, push; after the safely-dark verify, delete the Worker (`npx wrangler delete` in `workers/track/`) |
 | E+7d | **Report** | `python3 scripts/generate_report.py`, review, deliver to the organizer with per-restaurant one-pagers |
 
 Details for the two scripted transitions live in the README's "Event Day

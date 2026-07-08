@@ -709,15 +709,34 @@
     // Archived events never poll: trackUrl stays set for the stats pages'
     // historical reads, but the map itself must be fully dark.
     if (THEME.archived || !THEME.trackUrl) return;
+    // Clock-anchored self-stop: a tab cached during the event never sees a
+    // redeployed `archived` flag, so the loop also checks the dates it
+    // shipped with and kills its own timer once the like-grace window ends.
+    if (!canCastVotes()) {
+      clearInterval(eyesTimer);
+      return;
+    }
+    // Background tabs skip the poll — nobody is looking at the eyes, and a
+    // forgotten tab otherwise polls the Worker forever.
+    if (document.visibilityState === "hidden") return;
     fetch(THEME.trackUrl + "?eyes=true", { method: "GET" })
       .then(function (resp) { return resp.json(); })
-      .then(function (data) { renderEyes(data || {}); })
+      .then(function (data) {
+        // The Worker answers live-only endpoints with { disabled: true }
+        // after wind-down — the authoritative stop for clients whose clock
+        // disagrees with the event dates.
+        if (data && data.disabled) {
+          clearInterval(eyesTimer);
+          return;
+        }
+        renderEyes(data || {});
+      })
       .catch(function () {});
   }
 
   if (__eyesDevHost) seedAmbientSimViews();
   fetchEyes();
-  setInterval(fetchEyes, __eyesDevHost ? 5000 : 30000);
+  var eyesTimer = setInterval(fetchEyes, __eyesDevHost ? 5000 : 30000);
   // Re-place eyes when clustering changes so they stay attached to what's
   // visible (a cluster, or an individual pin) rather than scattering.
   map.on("zoomend moveend", function () { renderEyes(); });
