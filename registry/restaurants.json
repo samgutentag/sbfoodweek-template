@@ -13,7 +13,7 @@
     "Montecito": "#92400e",
     "Summerland": "#0d9488",
     "Carpinteria": "#1d3557",
-    "Santa Ynez Valley": "#6b7280"
+    "Santa Ynez": "#6b7280"
   },
   "venues": {
     "arnoldi-s": {
@@ -1716,7 +1716,7 @@
         {
           "label": null,
           "address": "3631 Sagunto St., Santa Ynez, CA",
-          "area": "Santa Ynez Valley",
+          "area": "Santa Ynez",
           "lat": 34.613083,
           "lng": -120.078474,
           "mapUrl": "https://maps.app.goo.gl/tQ9GFna3qRasLufZ7",

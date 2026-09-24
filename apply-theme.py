@@ -78,6 +78,30 @@ def domain_from_url(url):
     return re.sub(r"^https?://", "", url).rstrip("/").split("/")[0]
 
 
+def display_url(url):
+    """Scheme-less URL, path kept: https://example.com/burritoweek2026 -> example.com/burritoweek2026."""
+    return re.sub(r"^https?://", "", url).rstrip("/")
+
+
+def contact_email_for(cfg):
+    """Mirror of contactEmail() in event-state.js: <event slug>@contactDomain,
+    or sb<item>week<year>@ for a legacy single-event domain. None if unset."""
+    domain = cfg["contactDomain"]
+    if not domain:
+        return None
+    path = display_url(cfg["siteUrl"]).partition("/")[2]
+    slug = path.rstrip("/").split("/")[-1] if path else ""
+    if not slug:
+        year = (cfg["dataLiveDate"] or "")[:4] or time.strftime("%Y")
+        slug = f"sb{cfg['itemLabel']}week{year}"
+    return f"{slug}@{domain}"
+
+
+def site_has_path(url):
+    """True when the site is served under a subpath of a shared domain."""
+    return "/" in display_url(url)
+
+
 # ---------------------------------------------------------------------------
 # OG image SVG
 # ---------------------------------------------------------------------------
@@ -86,8 +110,6 @@ def update_og_svg(cfg):
     path = os.path.join(SCRIPT_DIR, "og-image.svg")
     with open(path, encoding="utf-8") as f:
         svg = f.read()
-
-    domain = domain_from_url(cfg["siteUrl"])
 
     # Expand short dates like "Feb 19–25" to "February 19–25"
     month_map = {
@@ -117,7 +139,7 @@ def update_og_svg(cfg):
         "335": line2,
         "395": dates_long,
         "455": subtitle,
-        "540": domain,
+        "540": display_url(cfg["siteUrl"]),
     }
 
     for y_val, new_text in replacements.items():
@@ -195,6 +217,13 @@ def update_og_png(cfg):
 
 def update_cname(cfg):
     path = os.path.join(SCRIPT_DIR, "CNAME")
+    # A subpath site (example.com/event) is a GitHub Pages project site; the
+    # domain belongs to the owner's user/org site, and a CNAME here would
+    # try to claim it.
+    if site_has_path(cfg["siteUrl"]):
+        if os.path.exists(path):
+            os.remove(path)
+        return
     domain = domain_from_url(cfg["siteUrl"])
     with open(path, "w", encoding="utf-8") as f:
         f.write(domain + "\n")
@@ -214,6 +243,26 @@ def update_index_html(cfg):
     dates = cfg["eventDates"]
     venmo_user = cfg["venmoUser"]
     venmo_note = cfg["venmoNote"]
+
+    # Link-preview tags, stamped into the HTML: iMessage, Slack, and Facebook
+    # crawlers don't run JS, so the runtime fill in the page head never reaches them.
+    site_url = cfg["siteUrl"].rstrip("/")
+    preview = {
+        ("property", "og:title"): f"{event} Map",
+        ("property", "og:description"): cfg["description"],
+        ("property", "og:image"): f"{site_url}/og-image.png",
+        ("property", "og:url"): f"{site_url}/",
+        ("name", "twitter:title"): f"{event} Map",
+        ("name", "twitter:description"): cfg["description"],
+        ("name", "twitter:image"): f"{site_url}/og-image.png",
+    }
+    for (attr, key), val in preview.items():
+        safe = val.replace("&", "&amp;").replace('"', "&quot;")
+        html = re.sub(
+            rf'(<meta {attr}="{re.escape(key)}" content=")[^"]*(")',
+            lambda m: m.group(1) + safe + m.group(2),
+            html,
+        )
 
     # Title fallback
     html = re.sub(
@@ -268,12 +317,7 @@ def update_index_html(cfg):
 
     # About modal: contact link href (placeholder when contactDomain is null so
     # a previous event's address never survives a re-theme)
-    contact_domain = cfg["contactDomain"]
-    year = (cfg["dataLiveDate"] or "")[:4] or time.strftime("%Y")
-    contact_email = (
-        f"sb{cfg['itemLabel']}week{year}@{contact_domain}"
-        if contact_domain else "YOUR-CONTACT-EMAIL"
-    )
+    contact_email = contact_email_for(cfg) or "YOUR-CONTACT-EMAIL"
     html = re.sub(
         r'(<a\s+id="aboutContact"[^>]*href=")[^"]*(")',
         rf'\g<1>mailto:{contact_email}\g<2>',
@@ -503,12 +547,7 @@ def update_embed_map_index(cfg):
 
     # About modal: contact link href (placeholder when contactDomain is null so
     # a previous event's address never survives a re-theme)
-    contact_domain = cfg["contactDomain"]
-    year = (cfg["dataLiveDate"] or "")[:4] or time.strftime("%Y")
-    contact_email = (
-        f"sb{cfg['itemLabel']}week{year}@{contact_domain}"
-        if contact_domain else "YOUR-CONTACT-EMAIL"
-    )
+    contact_email = contact_email_for(cfg) or "YOUR-CONTACT-EMAIL"
     html = re.sub(
         r'(<a\s+id="aboutContact"[^>]*href=")[^"]*(")',
         rf'\g<1>mailto:{contact_email}\g<2>',
@@ -579,8 +618,8 @@ def update_readme(cfg):
 
     # Embed snippet src
     md = re.sub(
-        r'(src="https?://)[^"/]+(/embed/map")',
-        rf"\g<1>{domain}\g<2>",
+        r'(src="https?://)[^"]+?(/embed/map")',
+        rf"\g<1>{display_url(site_url)}\g<2>",
         md,
     )
 
@@ -649,7 +688,7 @@ def update_admin_html(cfg):
 
     # Page title fallback
     html = re.sub(
-        r'(<a id="pageTitle" href="/">)[^<]*(</a>)',
+        r'(<a id="pageTitle" href="[^"]*">)[^<]*(</a>)',
         rf"\g<1>{event}\g<2>",
         html,
     )
@@ -683,7 +722,7 @@ def update_stats_html(cfg):
 
     # Page title fallback
     html = re.sub(
-        r'(<a id="pageTitle" href="/">)[^<]*(</a>)',
+        r'(<a id="pageTitle" href="[^"]*">)[^<]*(</a>)',
         rf"\g<1>{event}\g<2>",
         html,
     )

@@ -63,6 +63,10 @@ const THEME = {
   // admin pages keep reading historical data from the Worker.
   archived: false,
 
+  // CARTO basemap API key (free at https://carto.com/basemaps/apikey).
+  // null falls back to OpenStreetMap tiles. Keys are public in page source.
+  cartoApiKey: null,
+
   // Map center and zoom level — [latitude, longitude]
   mapCenter: [34.42, -119.7],
   mapZoom: 13,
@@ -81,7 +85,8 @@ const THEME = {
   // Cloudflare Web Analytics (null to disable, see README Step 8)
   cfAnalyticsToken: null,
 
-  // Contact email domain — auto-generates sb{itemLabel}week{year}@{domain}
+  // Contact email domain — auto-generates <event slug>@{domain}, e.g. burritoweek2026@…
+  // (sb{itemLabel}week{year}@ on a legacy single-event domain)
   // Set null to hide the contact link in the About modal
   contactDomain: null,
 

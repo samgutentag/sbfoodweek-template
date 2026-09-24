@@ -7,7 +7,7 @@
   var headerTitle = document.getElementById("headerTitle");
   if (headerTitle) {
     headerTitle.innerHTML =
-      THEME.eventName + " <span>| " + THEME.eventDates + "</span>";
+      siteTitleHtml() + ' <span class="header-dates">| ' + THEME.eventDates + "</span>";
   }
   var aboutTitle = document.getElementById("aboutTitle");
   if (aboutTitle) aboutTitle.textContent = THEME.eventName;
@@ -15,7 +15,7 @@
   if (aboutDates) aboutDates.textContent = THEME.eventDates;
   var aboutSource = document.getElementById("aboutSource");
   if (aboutSource) {
-    aboutSource.href = THEME.sourceUrl;
+    aboutSource.href = utmUrl(THEME.sourceUrl, "map", "source");
   }
   var aboutEmbed = document.getElementById("aboutEmbed");
   if (aboutEmbed) aboutEmbed.href = THEME.siteUrl + "/embed";
@@ -34,11 +34,8 @@
   }
   var aboutContact = document.getElementById("aboutContact");
   if (aboutContact && THEME.contactDomain) {
-    var year =
-      (THEME.dataLiveDate || "").slice(0, 4) || new Date().getFullYear();
-    var contactEmail =
-      "sb" + THEME.itemLabel + "week" + year + "@" + THEME.contactDomain;
-    aboutContact.href = "mailto:" + contactEmail;
+    var contactAddr = contactEmail();
+    aboutContact.href = "mailto:" + contactAddr;
   } else if (aboutContact) {
     aboutContact.style.display = "none";
   }
@@ -100,15 +97,9 @@
     return [shifted.lat, shifted.lng];
   }
 
-  var tileLayer = L.tileLayer(
-    "https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png",
-    {
-      maxZoom: 20,
-      subdomains: "abcd",
-      attribution:
-        '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>',
-    },
-  ).addTo(map);
+  var basemap = basemapTiles();
+  var tileLayer = L.tileLayer(basemap.url, basemap.options).addTo(map);
+  watchBasemap(map, tileLayer);
 
   // ── Marker cluster group ───────────────────────
 
@@ -405,19 +396,43 @@
   // Dietary tag icon helper
   var tagDefs = THEME.tagFilters || [];
 
+  // tagFilters icons are either image paths ("icon-vegetarian.svg") or emoji ("🍳")
+  function isImageIcon(icon) {
+    return /^(https?:|\/|\.)|\.(svg|png|jpe?g|gif|webp)$/i.test(icon);
+  }
+
+  function tagIconHtml(t, cls, style) {
+    var attrs =
+      ' title="' + escapeHtml(t.label) + '"' +
+      (cls ? ' class="' + cls + '"' : "") +
+      (style ? ' style="' + style + '"' : "");
+    if (isImageIcon(t.icon)) {
+      return '<img src="' + t.icon + '" alt="' + escapeHtml(t.label) + '"' + attrs + ">";
+    }
+    return '<span role="img" aria-label="' + escapeHtml(t.label) + '"' + attrs + ">" + t.icon + "</span>";
+  }
+
+  function tagIconEl(t, cls) {
+    var el;
+    if (isImageIcon(t.icon)) {
+      el = document.createElement("img");
+      el.src = t.icon;
+      el.alt = t.label;
+    } else {
+      el = document.createElement("span");
+      el.setAttribute("role", "img");
+      el.setAttribute("aria-label", t.label);
+      el.textContent = t.icon;
+    }
+    el.title = t.label;
+    el.className = cls;
+    return el;
+  }
+
   function getDietaryIconsHtml(r) {
     var html = "";
     tagDefs.forEach(function (t) {
-      if (r[t.key]) {
-        html +=
-          '<img src="' +
-          t.icon +
-          '" alt="' +
-          t.label +
-          '" title="' +
-          t.label +
-          '" class="dietary-icon">';
-      }
+      if (r[t.key]) html += tagIconHtml(t, "dietary-icon");
     });
     return html;
   }
@@ -443,14 +458,7 @@
   function createDietaryIconEls(r) {
     var frag = document.createDocumentFragment();
     tagDefs.forEach(function (t) {
-      if (r[t.key]) {
-        var img = document.createElement("img");
-        img.src = t.icon;
-        img.alt = t.label;
-        img.title = t.label;
-        img.className = "dietary-icon";
-        frag.appendChild(img);
-      }
+      if (r[t.key]) frag.appendChild(tagIconEl(t, "dietary-icon"));
     });
     return frag;
   }
@@ -553,7 +561,7 @@
       if (r.website)
         popupHtml +=
           '<a href="' +
-          r.website +
+          escapeHtml(utmUrl(r.website, "map", "website")) +
           '" target="_blank" rel="noopener" class="popup-dir-btn" title="Website">' +
           '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg>' +
           '<span class="dir-label"> Website</span></a>';
@@ -1148,6 +1156,7 @@
     const btn = document.createElement("button");
     btn.className = "area-btn";
     btn.setAttribute("data-area", area);
+    btn.style.setProperty("--area-color", AREA_COLORS[area] || "#999");
     btn.textContent = area;
     areaRow.appendChild(btn);
   });
@@ -1160,11 +1169,7 @@
     var btn = document.createElement("button");
     btn.className = "area-btn";
     btn.setAttribute("data-tag", t.key);
-    var img = document.createElement("img");
-    img.src = t.icon;
-    img.alt = t.label;
-    img.className = "tag-icon";
-    btn.appendChild(img);
+    btn.appendChild(tagIconEl(t, "tag-icon"));
     btn.appendChild(document.createTextNode(" " + t.label));
     tagRow.appendChild(btn);
   });
@@ -2103,12 +2108,13 @@
         var printTags = "";
         tagDefs.forEach(function (t) {
           if (r[t.key]) {
-            printTags +=
-              '<img src="' +
-              t.icon +
-              '" alt="' +
-              t.label +
-              '" style="width:14px;height:14px;vertical-align:-2px;margin-right:2px;opacity:0.7">';
+            printTags += tagIconHtml(
+              t,
+              "",
+              isImageIcon(t.icon)
+                ? "width:14px;height:14px;vertical-align:-2px;margin-right:2px;opacity:0.7"
+                : "font-size:12px;margin-right:2px",
+            );
           }
         });
         listHtml +=
@@ -2221,7 +2227,9 @@
       "script>" +
       "<script>" +
       'var m=L.map("printMap",{zoomControl:false,attributionControl:false});' +
-      'L.tileLayer("https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png",{maxZoom:20,subdomains:"abcd",crossOrigin:true}).addTo(m);' +
+      "L.tileLayer(" + JSON.stringify(basemapTiles().url) + "," +
+      JSON.stringify(Object.assign({}, basemapTiles().options, { attribution: undefined, crossOrigin: true })) +
+      ").addTo(m);" +
       markersJs +
       boundsJs +
       'document.getElementById("printBtn").addEventListener("click",function(){' +
@@ -2553,13 +2561,10 @@
   // Wire up Contact CTA
   var concludedContact = document.getElementById("concludedContact");
   if (concludedContact && THEME.contactDomain) {
-    var year =
-      (THEME.dataLiveDate || "").slice(0, 4) || new Date().getFullYear();
-    var contactEmail =
-      "sb" + THEME.itemLabel + "week" + year + "@" + THEME.contactDomain;
+    var contactAddr = contactEmail();
     concludedContact.href =
       "mailto:" +
-      contactEmail +
+      contactAddr +
       "?subject=" +
       encodeURIComponent("Ideas for next year");
   }

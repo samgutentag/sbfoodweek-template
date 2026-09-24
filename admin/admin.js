@@ -8,7 +8,7 @@
   var totalCount = document.getElementById("totalCount");
   var pageTitle = document.getElementById("pageTitle");
 
-  pageTitle.textContent = THEME.eventName;
+  pageTitle.outerHTML = siteTitleHtml();
 
   function fetchData(token) {
     if (!THEME.trackUrl) return;

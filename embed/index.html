@@ -113,7 +113,7 @@
     <div class="embed-wrapper">
       <iframe
         id="embedPreview"
-        src="/embed/map/"
+        src="map/"
         width="100%"
         height="600"
         style="border: none; border-radius: 8px"
@@ -147,12 +147,11 @@
         if (mobileLink) mobileLink.href = t.siteUrl + "/?src=embed";
         var embedContact = document.getElementById("embedContact");
         if (embedContact && t.contactDomain) {
-          var year = new Date().getFullYear();
-          embedContact.href = "mailto:sb" + t.itemLabel + "week" + year + "@" + t.contactDomain;
+          embedContact.href = "mailto:" + contactEmail();
         }
         document.getElementById("embedSnippet").querySelector("code").textContent =
           '<iframe\n' +
-          '  src="' + t.siteUrl + '/embed/map"\n' +
+          '  src="' + t.siteUrl + '/embed/map/"\n' +
           '  width="100%"\n' +
           '  height="600"\n' +
           '  style="border: none; border-radius: 8px;"\n' +

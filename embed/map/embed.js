@@ -16,7 +16,7 @@
   var embedTitle = document.getElementById("embedTitle");
   if (embedTitle) {
     embedTitle.innerHTML =
-      THEME.eventName +
+      siteTitleHtml(true) +
       ' <span class="embed-dates">| ' +
       THEME.eventDates +
       "</span>";
@@ -33,7 +33,7 @@
   if (aboutDates) aboutDates.textContent = THEME.eventDates;
   var aboutSource = document.getElementById("aboutSource");
   if (aboutSource) {
-    aboutSource.href = THEME.sourceUrl;
+    aboutSource.href = utmUrl(THEME.sourceUrl, "embed", "source");
   }
   var aboutEmbed = document.getElementById("aboutEmbed");
   if (aboutEmbed) aboutEmbed.href = THEME.siteUrl + "/embed";
@@ -54,11 +54,8 @@
   }
   var aboutContact = document.getElementById("aboutContact");
   if (aboutContact && THEME.contactDomain) {
-    var year =
-      (THEME.dataLiveDate || "").slice(0, 4) || new Date().getFullYear();
-    var contactEmail =
-      "sb" + THEME.itemLabel + "week" + year + "@" + THEME.contactDomain;
-    aboutContact.href = "mailto:" + contactEmail;
+    var contactAddr = contactEmail();
+    aboutContact.href = "mailto:" + contactAddr;
   } else if (aboutContact) {
     aboutContact.style.display = "none";
   }
@@ -90,15 +87,9 @@
     attributionControl: true,
   }).setView(THEME.mapCenter, THEME.mapZoom);
 
-  var tileLayer = L.tileLayer(
-    "https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png",
-    {
-      maxZoom: 20,
-      subdomains: "abcd",
-      attribution:
-        '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>',
-    },
-  ).addTo(map);
+  var basemap = basemapTiles();
+  var tileLayer = L.tileLayer(basemap.url, basemap.options).addTo(map);
+  watchBasemap(map, tileLayer);
 
   // ── Marker cluster group ───────────────────────
 
@@ -245,7 +236,7 @@
         hoursData = data;
         hoursLoaded = true;
         var hf = document.getElementById("hoursFilters");
-        if (hf) hf.style.display = "flex";
+        if (hf) hf.style.display = "";
         renderList();
       }
     })
@@ -482,7 +473,7 @@
       if (r.website)
         popupHtml +=
           '<a href="' +
-          r.website +
+          escapeHtml(utmUrl(r.website, "embed", "website")) +
           '" target="_blank" rel="noopener" class="popup-dir-btn" title="Website">' +
           '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg>' +
           " Website</a>";
@@ -789,7 +780,9 @@
 
   // ── Sidebar: area filter buttons ───────────────
 
-  var areas = ["All"];
+  // Same shape as the main map: one toggle button per area, no "All" button
+  // (clicking the active area clears it), colored from AREA_COLORS when active.
+  var areas = [];
   restaurants.forEach(function (r) {
     if (areas.indexOf(r.area) === -1) areas.push(r.area);
   });
@@ -797,8 +790,9 @@
   var filtersEl = document.getElementById("areaFilters");
   areas.forEach(function (area) {
     var btn = document.createElement("button");
-    btn.className = "area-btn" + (area === "All" ? " active" : "");
+    btn.className = "area-btn";
     btn.setAttribute("data-area", area);
+    btn.style.setProperty("--area-color", AREA_COLORS[area] || "#999");
     btn.textContent = area;
     filtersEl.appendChild(btn);
   });
@@ -830,19 +824,18 @@
   function tagIconSrc(icon) {
     return /^(https?:|\/|\.\.)/.test(icon) ? icon : "../../" + icon;
   }
+  // Icons are either image paths ("icon-vegetarian.svg") or emoji ("🍳")
+  function isImageIcon(icon) {
+    return /^(https?:|\/|\.)|\.(svg|png|jpe?g|gif|webp)$/i.test(icon);
+  }
   function getDietaryIconsHtml(r) {
     var html = "";
     (THEME.tagFilters || []).forEach(function (t) {
-      if (r[t.key]) {
-        html +=
-          '<img src="' +
-          tagIconSrc(t.icon) +
-          '" alt="' +
-          t.label +
-          '" title="' +
-          t.label +
-          '" class="dietary-icon">';
-      }
+      if (!r[t.key]) return;
+      var label = escapeHtml(t.label);
+      html += isImageIcon(t.icon)
+        ? '<img src="' + tagIconSrc(t.icon) + '" alt="' + label + '" title="' + label + '" class="dietary-icon">'
+        : '<span role="img" aria-label="' + label + '" title="' + label + '" class="dietary-icon">' + t.icon + "</span>";
     });
     return html;
   }
@@ -856,11 +849,19 @@
     var btn = document.createElement("button");
     btn.className = "area-btn";
     btn.setAttribute("data-tag", t.key);
-    var img = document.createElement("img");
-    img.src = tagIconSrc(t.icon);
-    img.alt = t.label;
-    img.className = "tag-icon";
-    btn.appendChild(img);
+    var icon;
+    if (isImageIcon(t.icon)) {
+      icon = document.createElement("img");
+      icon.src = tagIconSrc(t.icon);
+      icon.alt = t.label;
+    } else {
+      icon = document.createElement("span");
+      icon.setAttribute("role", "img");
+      icon.setAttribute("aria-label", t.label);
+      icon.textContent = t.icon;
+    }
+    icon.className = "tag-icon";
+    btn.appendChild(icon);
     btn.appendChild(document.createTextNode(" " + t.label));
     tagFilterSpan.appendChild(btn);
   });
@@ -888,11 +889,17 @@
 
   filtersEl.addEventListener("click", function (e) {
     if (!e.target.classList.contains("area-btn")) return;
+    var area = e.target.getAttribute("data-area");
+    var wasActive = activeArea === area;
     filtersEl.querySelectorAll(".area-btn").forEach(function (b) {
       b.classList.remove("active");
     });
-    e.target.classList.add("active");
-    activeArea = e.target.getAttribute("data-area");
+    if (wasActive) {
+      activeArea = "All";
+    } else {
+      e.target.classList.add("active");
+      activeArea = area;
+    }
     renderList();
   });
 
@@ -1613,7 +1620,9 @@
       "script>" +
       "<script>" +
       'var m=L.map("printMap",{zoomControl:false,attributionControl:false});' +
-      'L.tileLayer("https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png",{maxZoom:20,subdomains:"abcd",crossOrigin:true}).addTo(m);' +
+      "L.tileLayer(" + JSON.stringify(basemapTiles().url) + "," +
+      JSON.stringify(Object.assign({}, basemapTiles().options, { attribution: undefined, crossOrigin: true })) +
+      ").addTo(m);" +
       markersJs +
       boundsJs +
       'document.getElementById("printBtn").addEventListener("click",function(){' +
@@ -1735,13 +1744,10 @@
   // Contact CTA
   var concludedContact = document.getElementById("concludedContact");
   if (concludedContact && THEME.contactDomain) {
-    var year =
-      (THEME.dataLiveDate || "").slice(0, 4) || new Date().getFullYear();
-    var contactEmail =
-      "sb" + THEME.itemLabel + "week" + year + "@" + THEME.contactDomain;
+    var contactAddr = contactEmail();
     concludedContact.href =
       "mailto:" +
-      contactEmail +
+      contactAddr +
       "?subject=" +
       encodeURIComponent("Ideas for next year");
   }

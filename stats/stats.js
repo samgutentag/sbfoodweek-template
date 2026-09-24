@@ -9,8 +9,7 @@
   // Apply theme
   var pageTitle = document.getElementById("pageTitle");
   if (pageTitle) {
-    pageTitle.textContent = THEME.eventName;
-    pageTitle.href = THEME.siteUrl + "/";
+    pageTitle.outerHTML = siteTitleHtml();
   }
   var backLink = document.getElementById("backLink");
   if (backLink) backLink.href = THEME.siteUrl + "/";
