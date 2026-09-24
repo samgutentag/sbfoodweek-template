@@ -161,7 +161,7 @@
   <tr><td>Burger Week 2026</td><td><code>sbburgerweekmap.com</code></td><td>GitHub Pages, DNS-only (grey cloud), archived</td><td><code>around805.com/burgerweek2026</code></td></tr>
   <tr><td>Coffee Week 2026</td><td><code>sbcoffeeweekmap.com</code></td><td>GitHub Pages, DNS-only, archived</td><td><code>around805.com/coffeeweek2026</code></td></tr>
   <tr><td>Sandwich Week 2026</td><td><code>sbsandwichweekmap.com</code></td><td>GitHub Pages, DNS-only, archived</td><td><code>around805.com/sandwichweek2026</code></td></tr>
-  <tr><td>Burrito Week 2026</td><td>none (<code>sbburritoweekmap.com</code> was never registered)</td><td><code>burritoweek2026</code> repo, already configured for the subpath, not yet served</td><td><code>around805.com/burritoweek2026</code></td></tr>
+  <tr><td>Burrito Week 2026</td><td>none (<code>sbburritoweekmap.com</code> was never registered)</td><td><code>burritoweek2026</code> repo, served at the subpath by an interim Worker (route <code>around805.com/burritoweek2026*</code>) from launch on 2026-09-24</td><td><code>around805.com/burritoweek2026</code></td></tr>
 </table>
 <p><code>around805.com</code> is on Cloudflare, proxied, and currently answers every path with a <code>302</code> to <code>https://gutentag.world/</code> (path dropped, query string kept). That catch-all is the one thing Phase 1 has to work around.</p>
 
@@ -172,8 +172,9 @@
   <li><strong>Narrow it so it skips the week paths.</strong> Single Redirects run before Bulk Redirects, so an untouched catch-all swallows everything. If it is a Redirect Rule, set its expression to:
 <pre><code>not (starts_with(http.request.uri.path, "/burgerweek")
   or starts_with(http.request.uri.path, "/coffeeweek")
-  or starts_with(http.request.uri.path, "/sandwichweek"))</code></pre>
-  If it is a Page Rule, recreate it as a Redirect Rule with that expression and delete the Page Rule. Leave <code>/burritoweek</code> under the catch-all until burrito goes live.</li>
+  or starts_with(http.request.uri.path, "/sandwichweek")
+  or starts_with(http.request.uri.path, "/burritoweek"))</code></pre>
+  If it is a Page Rule, recreate it as a Redirect Rule with that expression and delete the Page Rule. The burrito session may already have applied this expression for the launch. If so, leave it alone. Redirect Rules run before Workers, so the burrito Worker only gets traffic once the catch-all skips <code>/burritoweek</code>.</li>
   <li><strong>Create the list.</strong> Account home &gt; Bulk Redirects &gt; Create Bulk Redirect List. Name it <code>around805_phase1</code>, upload <code>bulk-redirects-phase1.csv</code>.</li>
   <li><strong>Create the rule.</strong> Bulk Redirects &gt; Create Bulk Redirect Rule, pick <code>around805_phase1</code>, deploy.</li>
   <li><strong>Verify.</strong> <code>migration/verify-redirects.sh phase1</code>. Every line should say <code>ok</code>. Before setup, the around805 checks fail by landing on gutentag.world, which is expected.</li>
@@ -197,6 +198,9 @@
   <li><strong>Attach around805.com as the project's custom domain</strong> (plus <code>www</code>). Cloudflare replaces the zone's records and keeps them proxied, and Bulk Redirects only fire on proxied traffic.</li>
   <li><strong>Retire the gutentag.world catch-all.</strong> The site root becomes the event landing page. The latest-year aliases (<code>/burgerweek</code> and the rest) move into the repo's generated <code>_redirects</code>, so delete those three lines from <code>around805_phase1</code> at the same time.</li>
 </ol>
+
+<h3>Burrito Week is different</h3>
+<p>Burrito has no old domain, so it has no Phase 1 redirect and no Phase 2 cutover. The interim Worker serves <code>/burritoweek2026</code> directly, and the CSV only adds the <code>/burritoweek</code> alias. When the single-repo site ships, delete the interim Worker and its route in the same change that attaches around805.com to the new project. The URL stays the same.</p>
 
 <h2>Phase 2: old domain redirects to around805.com (per event)</h2>
 <p>About 30 minutes per event. Do one event, verify, then the next. Burger as the example.</p>
