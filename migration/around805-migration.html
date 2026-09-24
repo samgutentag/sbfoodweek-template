@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<!--
+  Canonical print-ready HTML document template for Sam.
+  Source of truth for ALL standalone HTML docs authored under ~/Developer
+  (reports, specs, notes, briefs, study guides, checklists, reference).
+
+  Referenced by ~/.claude/CLAUDE.md > Document Format.
+
+  RULES FOR CLAUDE:
+  - Use the <style> block, the #theme-toggle button, and the theme <script>
+    VERBATIM. Do not restyle, rename variables, reorder, or regenerate them
+    from memory. They must look and behave identically in every document.
+  - Only replace the <title>, the visible content between the markers, and
+    (if needed) ADD new content-specific classes at the END of the <style>
+    block. Never edit the theme variables or the toggle chrome.
+  - The base rules already encode Sam's conventions: serif body, system-sans
+    headings, minimal color, page-break-friendly, no external assets.
+  - No em dashes in the content. Preserve any verbatim quoted text exactly.
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>around805.com Food Week Migration</title>
+<style>
+  /* ===== THEME CHROME — DO NOT EDIT (keep identical across all docs) ===== */
+  :root {
+    --bg: #fff;
+    --text: #1a1a1a;
+    --heading: #111;
+    --muted: #555;
+    --muted2: #444;
+    --faint: #666;
+    --rule: #ddd;
+    --dot: #e2e2e2;
+    --code-bg: #f2f2f2;
+    --setup-bg: #f6f6f4;
+    --setup-border: #e0e0dc;
+    --watch-bg: #fbf7ec;
+    --watch-border: #b58900;
+    --btn-bg: #f0f0ee;
+    --btn-border: #ccc;
+    --accent: #c9a227;
+  }
+  html[data-theme="dark"] {
+    --bg: #17191d;
+    --text: #cfd2d6;
+    --heading: #f1f2f4;
+    --muted: #9aa0a6;
+    --muted2: #b3b8bd;
+    --faint: #888e94;
+    --rule: #34383e;
+    --dot: #2b2f34;
+    --code-bg: #262a30;
+    --setup-bg: #1e2126;
+    --setup-border: #34383e;
+    --watch-bg: #241f14;
+    --watch-border: #c9a227;
+    --btn-bg: #23262b;
+    --btn-border: #3a3f45;
+  }
+  #theme-toggle {
+    position: fixed;
+    top: 1rem;
+    right: 1rem;
+    font-family: system-ui, sans-serif;
+    font-size: 0.85rem;
+    color: var(--text);
+    background: var(--btn-bg);
+    border: 1px solid var(--btn-border);
+    border-radius: 6px;
+    padding: 0.4rem 0.7rem;
+    cursor: pointer;
+    z-index: 10;
+  }
+  #theme-toggle:hover { border-color: var(--faint); }
+  /* ===== END THEME CHROME ===== */
+
+  /* ===== BASE DOCUMENT STYLE (Sam's standing conventions) ===== */
+  body {
+    font-family: Georgia, 'Times New Roman', serif;
+    font-size: 16px;
+    line-height: 1.55;
+    color: var(--text);
+    max-width: 46rem;
+    margin: 2.5rem auto;
+    padding: 0 1.5rem;
+    background: var(--bg);
+    transition: background 0.15s ease, color 0.15s ease;
+  }
+  h1, h2, h3 {
+    font-family: system-ui, -apple-system, 'Segoe UI', sans-serif;
+    line-height: 1.25;
+    color: var(--heading);
+  }
+  h1 { font-size: 1.7rem; margin: 0 0 0.25rem; }
+  h2 {
+    font-size: 1.2rem;
+    margin: 2.2rem 0 0.6rem;
+    padding-bottom: 0.3rem;
+    border-bottom: 1px solid var(--rule);
+    page-break-after: avoid;
+  }
+  h3 { font-size: 1.02rem; margin: 1.5rem 0 0.4rem; }
+  p, li { color: var(--text); }
+  a { color: inherit; text-decoration: underline; text-decoration-color: var(--accent); }
+  code {
+    font-family: 'SF Mono', ui-monospace, Menlo, monospace;
+    font-size: 0.85em;
+    background: var(--code-bg);
+    padding: 0.1em 0.35em;
+    border-radius: 3px;
+  }
+  pre {
+    background: var(--code-bg);
+    padding: 0.9rem 1.1rem;
+    border-radius: 6px;
+    overflow-x: auto;
+    page-break-inside: avoid;
+  }
+  pre code { background: none; padding: 0; }
+  blockquote {
+    border-left: 3px solid var(--watch-border);
+    background: var(--watch-bg);
+    margin: 0.8rem 0;
+    padding: 0.7rem 0.9rem;
+    page-break-inside: avoid;
+  }
+  table { border-collapse: collapse; width: 100%; margin: 0.8rem 0; page-break-inside: avoid; }
+  th, td { border: 1px solid var(--rule); padding: 0.45rem 0.7rem; text-align: left; font-size: 0.95rem; }
+  th { font-family: system-ui, sans-serif; }
+  .meta { margin-top: 2.5rem; color: var(--faint); font-size: 0.85rem; font-family: system-ui, sans-serif; }
+  /* ===== END BASE ===== */
+
+  /* ===== PRINT: force clean light, hide the toggle ===== */
+  @media print {
+    :root { --bg:#fff; --text:#1a1a1a; --heading:#111; --setup-bg:#f6f6f4; --watch-bg:#fbf7ec; --code-bg:#f2f2f2; }
+    body { margin: 0; font-size: 12pt; }
+    blockquote, pre { background: none; }
+    #theme-toggle { display: none; }
+  }
+
+  /* ===== Document-specific styles may be ADDED below this line ===== */
+  .phase { font-family: system-ui, sans-serif; font-size: 0.8rem; color: var(--faint); text-transform: uppercase; letter-spacing: 0.05em; }
+  ol li { margin-bottom: 0.45rem; }
+</style>
+</head>
+<body>
+
+<button id="theme-toggle" type="button" aria-label="Toggle dark mode">Light mode</button>
+
+<!-- ===== CONTENT START ===== -->
+<h1>around805.com Food Week Migration</h1>
+<p class="phase">Runbook, drafted 2026-09-23. Redirects first, code later.</p>
+
+<p>Goal: every food week map lives at <code>around805.com/&lt;food&gt;week&lt;year&gt;</code>. Phase 1 makes those URLs work today by redirecting them to the existing domains. Phase 2, run per event once its code is hosted under around805.com, flips the direction so the old domains redirect in. Nothing in Phase 1 touches the old sites.</p>
+
+<h2>Current state (checked live 2026-09-23)</h2>
+<table>
+  <tr><th>Event</th><th>Today</th><th>Hosting</th><th>New URL</th></tr>
+  <tr><td>Burger Week 2026</td><td><code>sbburgerweekmap.com</code></td><td>GitHub Pages, DNS-only (grey cloud), archived</td><td><code>around805.com/burgerweek2026</code></td></tr>
+  <tr><td>Coffee Week 2026</td><td><code>sbcoffeeweekmap.com</code></td><td>GitHub Pages, DNS-only, archived</td><td><code>around805.com/coffeeweek2026</code></td></tr>
+  <tr><td>Sandwich Week 2026</td><td><code>sbsandwichweekmap.com</code></td><td>GitHub Pages, DNS-only, archived</td><td><code>around805.com/sandwichweek2026</code></td></tr>
+  <tr><td>Burrito Week 2026</td><td>none (<code>sbburritoweekmap.com</code> was never registered)</td><td><code>burritoweek2026</code> repo, already configured for the subpath, not yet served</td><td><code>around805.com/burritoweek2026</code></td></tr>
+</table>
+<p><code>around805.com</code> is on Cloudflare, proxied, and currently answers every path with a <code>302</code> to <code>https://gutentag.world/</code> (path dropped, query string kept). That catch-all is the one thing Phase 1 has to work around.</p>
+
+<h2>Phase 1: around805.com paths redirect to the old domains</h2>
+<p>About 20 minutes, all in the Cloudflare dashboard. Uses one Bulk Redirect list: <code>migration/bulk-redirects-phase1.csv</code>.</p>
+<ol>
+  <li><strong>Find the gutentag.world catch-all.</strong> In the <code>around805.com</code> zone, check Rules &gt; Redirect Rules, then Page Rules, then account-level Bulk Redirects. Note which one it is.</li>
+  <li><strong>Narrow it so it skips the week paths.</strong> Single Redirects run before Bulk Redirects, so an untouched catch-all swallows everything. If it is a Redirect Rule, set its expression to:
+<pre><code>not (starts_with(http.request.uri.path, "/burgerweek")
+  or starts_with(http.request.uri.path, "/coffeeweek")
+  or starts_with(http.request.uri.path, "/sandwichweek"))</code></pre>
+  If it is a Page Rule, recreate it as a Redirect Rule with that expression and delete the Page Rule. Leave <code>/burritoweek</code> under the catch-all until burrito goes live.</li>
+  <li><strong>Create the list.</strong> Account home &gt; Bulk Redirects &gt; Create Bulk Redirect List. Name it <code>around805_phase1</code>, upload <code>bulk-redirects-phase1.csv</code>.</li>
+  <li><strong>Create the rule.</strong> Bulk Redirects &gt; Create Bulk Redirect Rule, pick <code>around805_phase1</code>, deploy.</li>
+  <li><strong>Verify.</strong> <code>migration/verify-redirects.sh phase1</code>. Every line should say <code>ok</code>. Before setup, the around805 checks fail by landing on gutentag.world, which is expected.</li>
+</ol>
+
+<h3>What the CSV does</h3>
+<p>Columns, no header row: <code>source_url, target_url, status_code, preserve_query_string, include_subdomains, subpath_matching, preserve_path_suffix</code>.</p>
+<table>
+  <tr><th>Request</th><th>Lands on</th></tr>
+  <tr><td><code>around805.com/burgerweek2026</code></td><td><code>sbburgerweekmap.com/</code></td></tr>
+  <tr><td><code>around805.com/burgerweek2026/stats/</code></td><td><code>sbburgerweekmap.com/stats/</code> (path kept)</td></tr>
+  <tr><td><code>around805.com/burgerweek2026/embed/map/?x=1</code></td><td><code>sbburgerweekmap.com/embed/map/?x=1</code> (query kept)</td></tr>
+  <tr><td><code>around805.com/burgerweek</code></td><td><code>around805.com/burgerweek2026/</code>, then the old domain (latest-year alias)</td></tr>
+</table>
+<p>Every entry is a <code>302</code> on purpose. These redirects get reversed in Phase 2, and browsers cache a <code>301</code> hard enough that people would keep bouncing to the old domain after the flip. The year aliases stay <code>302</code> forever, since they move every year.</p>
+
+<h2>One-time: make around805.com a host</h2>
+<p>Needed before Burrito Week launches and before any Phase 2 cutover. About 30 minutes. The site itself is the single repo described in <code>docs/superpowers/specs/2026-09-23-around805-single-repo-design.md</code>, deployed to Cloudflare from GitHub Actions.</p>
+<ol>
+  <li><strong>Test the deployed site on its Cloudflare preview URL first.</strong> Check every event path.</li>
+  <li><strong>Attach around805.com as the project's custom domain</strong> (plus <code>www</code>). Cloudflare replaces the zone's records and keeps them proxied, and Bulk Redirects only fire on proxied traffic.</li>
+  <li><strong>Retire the gutentag.world catch-all.</strong> The site root becomes the event landing page. The latest-year aliases (<code>/burgerweek</code> and the rest) move into the repo's generated <code>_redirects</code>, so delete those three lines from <code>around805_phase1</code> at the same time.</li>
+</ol>
+
+<h2>Phase 2: old domain redirects to around805.com (per event)</h2>
+<p>About 30 minutes per event. Do one event, verify, then the next. Burger as the example.</p>
+<ol>
+  <li><strong>Confirm <code>events/burgerweek2026/</code> is imported</strong> and renders on the preview URL. You can't test the live path yet, because the Phase 1 entry still intercepts it.</li>
+  <li><strong>Delete the <code>around805.com/burgerweek2026</code> entry</strong> from <code>around805_phase1</code>. Keep the <code>/burgerweek</code> alias. Load the live path and confirm the map renders.</li>
+  <li><strong>Add the burger line from <code>bulk-redirects-phase2.csv</code></strong> to a second list, <code>around805_phase2</code>, with its own Bulk Redirect Rule. It does nothing yet, because the domain is still grey-clouded.</li>
+  <li><strong>Check the <code>sbburgerweekmap.com</code> zone's Edge Certificate shows Active</strong> (SSL/TLS &gt; Edge Certificates), then flip its apex <code>A</code> records and the <code>www</code> <code>CNAME</code> to proxied. The redirect takes effect as soon as traffic hits Cloudflare. The GitHub origin stays in place but is never reached.</li>
+  <li><strong>Verify</strong> with <code>migration/verify-redirects.sh phase2 burger</code>. After a clean week, change that entry to <code>301</code>. Later, clear the custom domain on the old repo and delete its <code>CNAME</code> file.</li>
+</ol>
+<blockquote><strong>Never run both directions for one event.</strong> Step 2 (remove the Phase 1 entry) always comes before step 4 (proxy the old domain). If both are active, <code>around805.com/burgerweek2026</code> and <code>sbburgerweekmap.com</code> bounce off each other. The verify script catches that as a loop.</blockquote>
+
+<h2>Code migration</h2>
+<p>Settled: one repo for every event, with URL-driven event selection and past years kept forever. The design, the code changes, and the migration order are in <code>docs/superpowers/specs/2026-09-23-around805-single-repo-design.md</code>. Checklists saved in browsers on the old domains don't carry over to around805.com, since it's a different origin. That's fine for archived events.</p>
+
+<h2>Files</h2>
+<table>
+  <tr><td><code>migration/bulk-redirects-phase1.csv</code></td><td>around805 paths to old domains, plus the year aliases. Upload now.</td></tr>
+  <tr><td><code>migration/bulk-redirects-phase2.csv</code></td><td>Old domains to around805 paths. Add one line per event at cutover.</td></tr>
+  <tr><td><code>migration/verify-redirects.sh</code></td><td>Checks the first-hop status, the final URL, and loops, for each phase.</td></tr>
+</table>
+
+<p class="meta">Lives in the template repo only (<code>migration/</code> is not in <code>template-manifest.json</code>, so it never syncs to event repos).</p>
+<!-- ===== CONTENT END ===== -->
+
+<script>
+  /* ===== THEME SCRIPT — DO NOT EDIT (keep identical across all docs) ===== */
+  (function () {
+    var root = document.documentElement;
+    var btn = document.getElementById('theme-toggle');
+    var stored = null;
+    try { stored = localStorage.getItem('doc-theme'); } catch (e) {}
+    var systemDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+    var theme = stored || (systemDark ? 'dark' : 'light');
+
+    function apply(t) {
+      root.setAttribute('data-theme', t);
+      btn.textContent = t === 'dark' ? 'Light mode' : 'Dark mode';
+    }
+    apply(theme);
+
+    btn.addEventListener('click', function () {
+      theme = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+      apply(theme);
+      try { localStorage.setItem('doc-theme', theme); } catch (e) {}
+    });
+  })();
+  /* ===== END THEME SCRIPT ===== */
+</script>
+
+</body>
+</html>

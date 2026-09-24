@@ -2,3 +2,4 @@
 .wrangler/
 tracking_data.json
 __pycache__/
+docs/superpowers/**/*.html
