@@ -154,7 +154,9 @@ Today that's 2026. Once `events/burritoweek2027/` ships, the same URL loads
    `/burritoweek*` path. Make the code changes above. Check `feat/subpath-hosting` first:
    it already makes the root-absolute links relative and adds
    `basemapTiles()` with a CARTO API key and OSM fallback (CARTO raster tiles
-   need a key since 2026-09-23).
+   need a key since 2026-09-23, and a rejected referer falls back to OSM via
+   `watchBasemap()`). `apply-theme.py` there also stamps og: and twitter:
+   meta into the HTML, which is the per-event stamping `build.py` needs.
 2. **Stand up hosting.** Create the Cloudflare project and the Actions deploy
    with the build and smoke test. Test on the preview URL. around805.com's
    Phase 1 redirects keep working the whole time.

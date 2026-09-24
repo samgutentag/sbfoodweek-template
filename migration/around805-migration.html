@@ -169,7 +169,7 @@
 <p>About 20 minutes, all in the Cloudflare dashboard. Uses one Bulk Redirect list: <code>migration/bulk-redirects-phase1.csv</code>.</p>
 <ol>
   <li><strong>Find the gutentag.world catch-all.</strong> In the <code>around805.com</code> zone, check Rules &gt; Redirect Rules, then Page Rules, then account-level Bulk Redirects. Note which one it is.</li>
-  <li><strong>Narrow it so it skips the week paths.</strong> Single Redirects run before Bulk Redirects, so an untouched catch-all swallows everything. If it is a Redirect Rule, set its expression to:
+  <li><strong>Done 2026-09-24 for the burrito launch.</strong> The catch-all already uses the expression below. Until the list in step 3 exists, <code>/burgerweek*</code>, <code>/coffeeweek*</code>, and <code>/sandwichweek*</code> hang and then return 522, so do steps 3 to 5 soon. <strong>Narrow it so it skips the week paths.</strong> Single Redirects run before Bulk Redirects, so an untouched catch-all swallows everything. If it is a Redirect Rule, set its expression to:
 <pre><code>not (starts_with(http.request.uri.path, "/burgerweek")
   or starts_with(http.request.uri.path, "/coffeeweek")
   or starts_with(http.request.uri.path, "/sandwichweek")
@@ -188,6 +188,7 @@
   <tr><td><code>around805.com/burgerweek2026/stats/</code></td><td><code>sbburgerweekmap.com/stats/</code> (path kept)</td></tr>
   <tr><td><code>around805.com/burgerweek2026/embed/map/?x=1</code></td><td><code>sbburgerweekmap.com/embed/map/?x=1</code> (query kept)</td></tr>
   <tr><td><code>around805.com/burgerweek</code></td><td><code>around805.com/burgerweek2026/</code>, then the old domain (latest-year alias)</td></tr>
+  <tr><td><code>www.around805.com/anything</code></td><td><code>around805.com/anything</code> (301, fixes the 522 <code>www</code> returns today)</td></tr>
 </table>
 <p>Every entry is a <code>302</code> on purpose. These redirects get reversed in Phase 2, and browsers cache a <code>301</code> hard enough that people would keep bouncing to the old domain after the flip. The year aliases stay <code>302</code> forever, since they move every year.</p>
 

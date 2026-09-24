@@ -56,6 +56,7 @@ case $phase in
     # Burrito has no legacy domain: served in place by the interim Worker.
     check "https://around805.com/burritoweek2026/"         200 "https://around805.com/burritoweek2026/"
     check "https://around805.com/burritoweek"              302 "https://around805.com/burritoweek2026/"
+    check "https://www.around805.com/burritoweek2026/"     301 "https://around805.com/burritoweek2026/"
     check "https://around805.com/" 302 "https://gutentag.world/"
     ;;
   phase2)
