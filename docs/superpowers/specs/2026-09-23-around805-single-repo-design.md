@@ -146,10 +146,12 @@ Today that's 2026. Once `events/burritoweek2027/` ships, the same URL loads
 
 1. **Restructure this repo** into `app/`, `types/`, `events/`, and
    `build.py`. Bring in Burrito Week 2026 first. It launched 2026-09-24 from
-   the `burritoweek2026` repo on an interim Worker (route
-   `around805.com/burritoweek2026*`), so importing it is a like-for-like
-   swap. Delete that Worker and route when around805.com attaches to the new
-   project. Make the code changes above. Check `feat/subpath-hosting` first:
+   the `burritoweek2026` repo on the interim Worker
+   `around805-burritoweek2026` (route `around805.com/burritoweek*`, source in
+   that repo's `workers/site/`), so importing it is a like-for-like swap.
+   Delete that Worker and route when around805.com attaches to the new
+   project, and before any `burritoweek2027` exists: the route swallows every
+   `/burritoweek*` path. Make the code changes above. Check `feat/subpath-hosting` first:
    it already makes the root-absolute links relative and adds
    `basemapTiles()` with a CARTO API key and OSM fallback (CARTO raster tiles
    need a key since 2026-09-23).

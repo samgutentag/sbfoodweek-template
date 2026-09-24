@@ -161,7 +161,7 @@
   <tr><td>Burger Week 2026</td><td><code>sbburgerweekmap.com</code></td><td>GitHub Pages, DNS-only (grey cloud), archived</td><td><code>around805.com/burgerweek2026</code></td></tr>
   <tr><td>Coffee Week 2026</td><td><code>sbcoffeeweekmap.com</code></td><td>GitHub Pages, DNS-only, archived</td><td><code>around805.com/coffeeweek2026</code></td></tr>
   <tr><td>Sandwich Week 2026</td><td><code>sbsandwichweekmap.com</code></td><td>GitHub Pages, DNS-only, archived</td><td><code>around805.com/sandwichweek2026</code></td></tr>
-  <tr><td>Burrito Week 2026</td><td>none (<code>sbburritoweekmap.com</code> was never registered)</td><td><code>burritoweek2026</code> repo, served at the subpath by an interim Worker (route <code>around805.com/burritoweek2026*</code>) from launch on 2026-09-24</td><td><code>around805.com/burritoweek2026</code></td></tr>
+  <tr><td>Burrito Week 2026</td><td>none (<code>sbburritoweekmap.com</code> was never registered)</td><td><code>burritoweek2026</code> repo, served at the subpath by the interim Worker <code>around805-burritoweek2026</code> (route <code>around805.com/burritoweek*</code>, source in <code>burritoweek2026/workers/site/</code>) from launch on 2026-09-24</td><td><code>around805.com/burritoweek2026</code></td></tr>
 </table>
 <p><code>around805.com</code> is on Cloudflare, proxied, and currently answers every path with a <code>302</code> to <code>https://gutentag.world/</code> (path dropped, query string kept). That catch-all is the one thing Phase 1 has to work around.</p>
 
@@ -200,7 +200,7 @@
 </ol>
 
 <h3>Burrito Week is different</h3>
-<p>Burrito has no old domain, so it has no Phase 1 redirect and no Phase 2 cutover. The interim Worker serves <code>/burritoweek2026</code> directly, and the CSV only adds the <code>/burritoweek</code> alias. When the single-repo site ships, delete the interim Worker and its route in the same change that attaches around805.com to the new project. The URL stays the same.</p>
+<p>Burrito has no old domain, so it has no Phase 1 redirect and no Phase 2 cutover. The interim Worker serves <code>/burritoweek2026</code> directly, and the CSV only adds the <code>/burritoweek</code> alias. The route is <code>/burritoweek*</code>, so it also catches <code>/burritoweek2027</code>. When the single-repo site ships, delete the interim Worker and its route in the same change that attaches around805.com to the new project. The URL stays the same.</p>
 
 <h2>Phase 2: old domain redirects to around805.com (per event)</h2>
 <p>About 30 minutes per event. Do one event, verify, then the next. Burger as the example.</p>
